@@ -7,7 +7,7 @@ const Keys = require('webpki.org').Keys;
 const JCS = require('webpki.org').JCS;
 
 function readKey(path) {
-  return Keys.decodePrivateKeyFromPEM(FS.readFileSync(__dirname + '/test/' + path).toString());
+  return Keys.decodePrivateKeyFromPEM(FS.readFileSync(__dirname + '/test/' + path));
 }
 
 // Load a private key
