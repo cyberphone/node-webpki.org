@@ -1,0 +1,10 @@
+{ "name": "webpki.org",
+  "description": "JSON and PKI tools",
+  "main": "../../index.js",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url":  "git://github.com/mixu/modulename.git" },
+  "dependencies": [],
+  "private": true
+}
