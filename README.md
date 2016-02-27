@@ -34,6 +34,7 @@ console.log(JSON.stringify(signedJavaScript));
 ```
 
 ### Resulting JSON string
+(edited a bit for readability reasons while still being cryptographically correct)
 
 ```json
 {
