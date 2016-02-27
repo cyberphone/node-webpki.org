@@ -1,0 +1,25 @@
+<project name="cleaner" default="clean" basedir=".">
+
+  <target name="clean">
+    <fixcrlf srcdir="."
+       tab="remove"
+       tablength="2"
+       eol="lf"
+       eof="remove"
+       includes="*.js, *.pem, *.md, *.txt, *.json"/>
+    <fixcrlf srcdir=".."
+       tab="remove"
+       tablength="2"
+       eol="lf"
+       eof="remove"
+       includes="*.js, *.pem, *.md, *.txt, *.json"/>
+    <fixcrlf srcdir="../lib"
+       tab="remove"
+       tablength="2"
+       eol="lf"
+       eof="remove"
+       includes="*.js, *.pem, *.md, *.txt, *.json"/>
+  </target>
+
+</project>
+
