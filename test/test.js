@@ -17,22 +17,27 @@
  
 'use strict';
 
-const fs = require('fs');
-const crypto = require('crypto');
+/*================================================================*/
+/*                            Test                                */
+/*================================================================*/
+
+// Unit testing suite
+
+const FS = require('fs');
 
 const Keys = require('..').Keys;
 const Base64URL = require('..').Base64URL;
 const JCS = require('..').JCS;
 
 function readFile(path) {
-  return fs.readFileSync(__dirname + '/' + path).toString();
+  return FS.readFileSync(__dirname + '/' + path).toString();
 }
 
-const publicEcP256Key = Keys.decodePublicKeyFromPEM(readFile('public-p256.pem'));
-const privateEcP256Pkcs1Key = Keys.decodePrivateKeyFromPEM(readFile('private-p256-pkcs1.pem'));
+const publicEcP256Key = Keys.createPublicKeyFromPEM(readFile('public-p256.pem'));
+const privateEcP256Pkcs1Key = Keys.createPrivateKeyFromPEM(readFile('private-p256-pkcs1.pem'));
 console.log(privateEcP256Pkcs1Key);
-const ecCertificate = Keys.decodeCertificatePathFromPEM(readFile('certificate-p256.pem'));
-const privateRsaPkcs8Key = Keys.decodePrivateKeyFromPEM(readFile('private-rsa-pkcs8.pem'));
+const ecCertificate = Keys.createCertificatePathFromPEM(readFile('certificate-p256.pem'));
+const privateRsaPkcs8Key = Keys.createPrivateKeyFromPEM(readFile('private-rsa-pkcs8.pem'));
 
 console.log(JSON.stringify(new JCS.Signature(privateEcP256Pkcs1Key).sign({'statement':'Hello signed world!'})));
 console.log(JSON.stringify(new JCS.Signature(privateRsaPkcs8Key,'RS512').sign({'statement':'Hello signed world!'})));
@@ -91,19 +96,19 @@ function encodePublicKey(key, spkiBase64URL) {
                  '\n-----END PUBLIC KEY-----\n') {
     throw new TypeError('Key mismatch: ' + spkiBase64URL);
   }
-  Keys.decodePublicKeyFromPEM(key.pem);
+  Keys.createPublicKeyFromPEM(key.pem);
 }
 
 base64run();
 
 encodePublicKey(Keys.encodePublicKey({type: 'EC',
-                                        curve: 'P-256',
+curve: 'P-256',
 x: 'GRgbhKB9Mw1lDKJFMbD_HsBvHR9235X7zF2SxHkDiOU',
 y: 'isxpqxSx6AAEmZfgL5HevS67ejfm_4HcsB883TUaccs'}),
 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEGRgbhKB9Mw1lDKJFMbD_HsBvHR9235X7zF2SxHkDiOWKzGmrFLHoAASZl-Avkd69Lrt6N-b_gdywHzzdNRpxyw');
 
 encodePublicKey(Keys.encodePublicKey({type: 'EC',
-                                        curve: 'P-521',
+curve: 'P-521',
 x: 'AQggHPZ-De2Tq_7U7v8ADpjyouKk6eV97Lujt9NdIcZgWI_cyOLv9HZulGWtC7I3X73ABE-rx95hAKbxiqQ1q0bA',
 y: 'AP5yYckNtHGuzZ9Gb8oqueBXwgG5Riu5LnbhQUz5Mb_Xjo4mnhqe1f396ldZMUvyJdi2O03OZdhkpVv_ks2CsYHp'}),
 'MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBCCAc9n4N7ZOr_tTu\
