@@ -1,6 +1,9 @@
 # JCS (JSON Cleartext Signature) for "node.js"
 
-Very early documentation
+Very early documentation, stay tuned :-)
+
+JCS rationale: https://cyberphone.github.io/openkeystore/resources/docs/jsonsignatures.html<br>
+JCS specification: https://cyberphone.github.io/openkeystore/resources/docs/jcs.html
 
 ### Create a signed object
 
