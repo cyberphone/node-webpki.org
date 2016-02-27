@@ -1,8 +1,9 @@
-### JCS (JSON Cleartext Signature) for "node.js"
+# JCS (JSON Cleartext Signature) for "node.js"
 
 Very early documentation
 
-## Create a signed object
+### Create a signed object
+
 ```JavaScript
 'use strict';
 
@@ -30,6 +31,10 @@ var signedJavaScript = signer.sign(jsonObject);
 
 // Print it on the console as JSON
 console.log(JSON.stringify(signedJavaScript));
+```
+
+### Resulting JSON string
+
 ```json
 {
   "statement": "Hello signed world!",
@@ -46,7 +51,8 @@ console.log(JSON.stringify(signedJavaScript));
 }
 ```
 
-## Validate a signature
+### Validate a signature
+
 ```javascript
 // Now we could verify the signed object we just created
 
