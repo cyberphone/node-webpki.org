@@ -2,6 +2,7 @@
 
 Very early documentation
 
+## Create a signed object
 ```JavaScript
 'use strict';
 
@@ -25,10 +26,10 @@ var signer = new JCS.Signature(privateKey);
 var jsonObject = {'statement':'Hello signed world!'};
 
 // Perform signing
-var result = signer.sign(jsonObject);
+var signedJavaScript = signer.sign(jsonObject);
 
 // Print it on the console as JSON
-console.log(JSON.stringify(result));
+console.log(JSON.stringify(signedJavaScript));
 ```json
 {
   "statement": "Hello signed world!",
@@ -43,4 +44,25 @@ console.log(JSON.stringify(result));
     "value": "ie7k1zVY4eGBjCJz9z7c9wbkd5r5MW8Yu9zkJF3Jyy2sRww9kdFqJux-BiK02FCnBTn43Pz4NQMdlScIP9NhVA"
   }
 }
+```
+
+## Validate a signature
+```javascript
+// Now we could verify the signed object we just created
+
+function readPublicKey(path) {
+  return Keys.createPublicKeyFromPEM(FS.readFileSync(__dirname + '/test/' + path));
+}
+
+// Load a matching public key
+const publicKey = readPublicKey('public-p256.pem');
+
+// Create a verifier object
+var verifier = new JCS.Verifier();
+
+// Call decoding.  This will check that signature is technically correct
+var result = verifier.decodeSignature(signedJavaScript);
+
+// Now check if the anticipated key was used
+console.log('Validation success=' + result.verifyPublicKey(publicKey));
 ```

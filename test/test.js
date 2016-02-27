@@ -39,8 +39,19 @@ console.log(privateEcP256Pkcs1Key);
 const ecCertificate = Keys.createCertificatePathFromPEM(readFile('certificate-p256.pem'));
 const privateRsaPkcs8Key = Keys.createPrivateKeyFromPEM(readFile('private-rsa-pkcs8.pem'));
 
-console.log(JSON.stringify(new JCS.Signature(privateEcP256Pkcs1Key).sign({'statement':'Hello signed world!'})));
-console.log(JSON.stringify(new JCS.Signature(privateRsaPkcs8Key,'RS512').sign({'statement':'Hello signed world!'})));
+function signStuff(privateKey, algorithm) {
+  var res = new JCS.Signature(privateKey, algorithm).sign({'statement':'Hello signed world!'});
+  console.log(JSON.stringify(res));
+  var result = new JCS.Verifier().decodeSignature(res);
+  console.log(' PUB=' + result.verifyPublicKey(publicEcP256Key) + 
+              ' PEML=' + result.getPublicKey().pem.length + 
+              ' SPKIL=' + result.getPublicKey().getSPKI().length + 
+              ' SA=' + result.signatureAlgorithm);
+}
+
+signStuff(privateEcP256Pkcs1Key);
+signStuff(privateEcP256Pkcs1Key, 'ES512');
+signStuff(privateRsaPkcs8Key);
 
 function base64run() {
   for (var times = 0; times < 20; times++) {

@@ -20,7 +20,25 @@ var signer = new JCS.Signature(privateKey);
 var jsonObject = {'statement':'Hello signed world!'};
 
 // Perform signing
-var result = signer.sign(jsonObject);
+var signedJavaScript = signer.sign(jsonObject);
 
 // Print it on the console as JSON
-console.log(JSON.stringify(result));
+console.log(JSON.stringify(signedJavaScript));
+
+// Now we could verify the signed object we just created
+
+function readPublicKey(path) {
+  return Keys.createPublicKeyFromPEM(FS.readFileSync(__dirname + '/test/' + path));
+}
+
+// Load a matching public key
+const publicKey = readPublicKey('public-p256.pem');
+
+// Create a verifier object
+var verifier = new JCS.Verifier();
+
+// Call decoding.  This will check that signature is technically correct
+var result = verifier.decodeSignature(signedJavaScript);
+
+// Now check if the anticipated key was used
+console.log('Validation success=' + result.verifyPublicKey(publicKey));
