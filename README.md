@@ -24,7 +24,7 @@ function readPrivateKey(path) {
 const privateKey = readPrivateKey('private-p256-pkcs1.pem');
 
 // Initiate the signer
-var signer = new JCS.Signature(privateKey);
+var signer = new JCS.Signer(privateKey);
 
 // Create an object to sign
 var jsonObject = {'statement':'Hello signed world!'};

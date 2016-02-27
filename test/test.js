@@ -40,7 +40,7 @@ const ecCertificate = Keys.createCertificatePathFromPEM(readFile('certificate-p2
 const privateRsaPkcs8Key = Keys.createPrivateKeyFromPEM(readFile('private-rsa-pkcs8.pem'));
 
 function signStuff(privateKey, algorithm) {
-  var res = new JCS.Signature(privateKey, algorithm).sign({'statement':'Hello signed world!'});
+  var res = new JCS.Signer(privateKey, algorithm).sign({'statement':'Hello signed world!'});
   console.log(JSON.stringify(res));
   var result = new JCS.Verifier().decodeSignature(res);
   console.log(' PUB=' + result.verifyPublicKey(publicEcP256Key) + 
