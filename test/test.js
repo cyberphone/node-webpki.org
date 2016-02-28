@@ -28,6 +28,7 @@ const FS = require('fs');
 const Keys = require('..').Keys;
 const Base64URL = require('..').Base64URL;
 const JCS = require('..').JCS;
+const CertRead = require('./certread');
 
 function readFile(path) {
   return FS.readFileSync(__dirname + '/' + path).toString();
@@ -36,7 +37,7 @@ function readFile(path) {
 const publicEcP256Key = Keys.createPublicKeyFromPEM(readFile('public-p256.pem'));
 const privateEcP256Pkcs1Key = Keys.createPrivateKeyFromPEM(readFile('private-p256-pkcs1.pem'));
 console.log(privateEcP256Pkcs1Key);
-const ecCertificate = Keys.createCertificatePathFromPEM(readFile('certificate-p256.pem'));
+const ecCertificatePath = Keys.createCertificatePathFromPEM(readFile('certificate-p256.pem'));
 const privateRsaPkcs8Key = Keys.createPrivateKeyFromPEM(readFile('private-rsa-pkcs8.pem'));
 
 function signStuff(privateKey, algorithm) {
@@ -52,6 +53,18 @@ function signStuff(privateKey, algorithm) {
 signStuff(privateEcP256Pkcs1Key);
 signStuff(privateEcP256Pkcs1Key, 'ES512');
 signStuff(privateRsaPkcs8Key);
+
+for (var q = 0; q < 1000; q++) {
+  new JCS.Verifier().decodeSignature(new JCS.Signer(privateEcP256Pkcs1Key).sign({'statement':'Hello signed world!'}));
+}
+
+var certSigner = new JCS.Signer(privateEcP256Pkcs1Key);
+certSigner.setCertificatePath(ecCertificatePath);
+var certRes = certSigner.sign({'statement':'Hello signed world!'});
+console.log(certRes);
+new JCS.Verifier().decodeSignature(certRes);
+
+CertRead.scanCerts();
 
 function base64run() {
   for (var times = 0; times < 20; times++) {
