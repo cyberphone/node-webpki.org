@@ -76,3 +76,60 @@ var result = verifier.decodeSignature(signedJavaScript);
 // Now check if the anticipated key was used
 console.log('Validation success=' + result.verifyPublicKey(publicKey));
 ```
+
+###Using Certificates
+
+Creating signatures with certificate paths is almost identical to
+signatures only using public keys.  You simply need to add the path.
+
+```javascript
+'use strict';
+
+const FS = require('fs');
+const Crypto = require('crypto');
+
+const Keys = require('webpki.org').Keys;
+const JCS = require('webpki.org').JCS;
+
+// Load private key and certificate path
+const keyData = FS.readFileSync(__dirname + '/test/mybank-cert-and-key-p256.pem');
+const privateKey = Keys.createPrivateKeyFromPEM(keyData);
+const certificatePath = Keys.createCertificatePathFromPEM(keyData);
+
+// Initiate the signer
+var signer = new JCS.Signer(privateKey);
+
+// Indicate that we want to include a certificate path
+signer.setCertificatePath(certificatePath, true);
+
+// Create an object to sign
+var jsonObject = {'statement':'Hello signed world!'};
+
+// Perform signing
+var signedJavaScript = signer.sign(jsonObject);
+
+// Print it on the console as JSON
+console.log(JSON.stringify(signedJavaScript));
+
+```
+
+This sample would generate the following (albeit a bit "beautified") JSON:
+
+```json
+{
+    "statement": "Hello signed world!",
+    "signature": {
+        "algorithm": "ES256",
+        "signerCertificate": {
+            "issuer": "CN=Payment Network Sub CA3,C=EU",
+            "serialNumber": "1441094164079",
+            "subject": "CN=mybank.com,2.5.4.5=#130434353031,C=FR"
+        },
+        "certificatePath": [
+            "MIIBtTCCAVmgAwIBAgIGAU-H595vMAwGCCqGSM49BAMCBQAwLzELMAkGA1UEBhMCRVUxIDAeBgNVBAMTF1BheW1lbnQgTmV0d29yayBTdWIgQ0EzMB4XDTE0MDEwMTAwMDAwMFoXDTIwMDcxMDA5NTk1OVowMTELMAkGA1UEBhMCRlIxDTALBgNVBAUTBDQ1MDExEzARBgNVBAMTCm15YmFuay5jb20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASjhSNHJyRmQi5U-r7WkNns0D6b1n1gQybglCvyXgIA2RCSJXJKHZrw37giKmGqX-4cXU3x__zOQXN1U48VAwNvo10wWzAJBgNVHRMEAjAAMA4GA1UdDwEB_wQEAwIHgDAdBgNVHQ4EFgQUOdV3H3r6TufkQh-dqhcXMrjUY2kwHwYDVR0jBBgwFoAUy0fdXq1oJ6GFAJo10qx609KDARAwDAYIKoZIzj0EAwIFAANIADBFAiEAluqzuTTzVBG74AoALaWRsRn9QALg2N6C3sIlztm6sPoCID1ZnGnTrhz-CodxuGvg7fkOVfdffdSuEdyhQXemGtT4",
+            "MIIDcjCCAVqgAwIBAgIBAzANBgkqhkiG9w0BAQ0FADAwMQswCQYDVQQGEwJVUzEhMB8GA1UEAxMYUGF5bWVudCBOZXR3b3JrIFJvb3QgQ0ExMB4XDTEyMDcxMDEwMDAwMFoXDTI1MDcxMDA5NTk1OVowLzELMAkGA1UEBhMCRVUxIDAeBgNVBAMTF1BheW1lbnQgTmV0d29yayBTdWIgQ0EzMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEcX8CYrYFoQhPbTci93W5qyCx0i0H-FvmXIvH5XNBlnNLfPkRacqn0PRFNn4Z4o3BVxI3x5yob9C7FqpKslcCgKNjMGEwDwYDVR0TAQH_BAUwAwEB_zAOBgNVHQ8BAf8EBAMCAQYwHQYDVR0OBBYEFMtH3V6taCehhQCaNdKsetPSgwEQMB8GA1UdIwQYMBaAFELvwS_Fk7IfHMWJeu-yhGdM-5EiMA0GCSqGSIb3DQEBDQUAA4ICAQBNQdIOSU2fB5JjCO9Q0mCfOxDXFihMKSiOanAJ_r2rxGN7Uprw32JPsJnQhuxbrwmniKgCmBVD6Jak4GtHSLVvJPjpf_Pe7pUbyMb6iNNeV3SmJvsHoE2m5WdSGxjIPxK4NOBv3Mm3Ib1_kxyVceegHEHRUk5IXyQUNV1sUsxIypELjC8bAIvnMj_J1FlP8nsfehbibT3XH04uvX9dgNGexpz8BDLa0fEpLzrKoyMtUbSwg88_WsdPnkvp1fhiwCF9GpIHwsXi3Nv-Wdgdyn-hKFQe6sP2FmsPDiI2qWqX7fEs0VN5Uo2oI5Q2T6673JiZnkycXYLNIRpc06KSTcs8B45u5NMAyvLx3l4S8My-HK4nfiqbF3TPVGJkq4aXAAZnhVcQTrO71tQ0BJMibKjz6sylBEnhlFQs3ICcesaGVXV3JVbwtf_OkAUUUduYWOmUZU5ng3vNJV0ofqfvoNcBlVsrWpFNqImy2-icUxiad_8--ortiq4WG594Ap52CqXt7K8UcZaMLDAj2COOmo1gy9iUjzgyzSqnYye2Gqr72ts5jd8B8wkM1rM0JDM6DvCyJgHVvc8VTNE7Mt2Mu9XsofQkdLdDgrPuo6AV88g1BGk7cY0FJMJFoBAlrj98A4KslbeGBV7AUGuzvS-w1VA6dRH6_5Fv2eSHXW6pzA_D8Q"
+        ],
+        "value": "dBnkOuspGDc63aSWkXnXFPsdd2w8EpKl-01FbhO2v-oqVZ4JHUtHWP76qX04DqUJJWKy8Kw47jmKpAwkET2O0w"
+    }
+}
+```

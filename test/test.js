@@ -59,9 +59,9 @@ for (var q = 0; q < 1000; q++) {
 }
 
 var certSigner = new JCS.Signer(privateEcP256Pkcs1Key);
-certSigner.setCertificatePath(ecCertificatePath);
+certSigner.setCertificatePath(ecCertificatePath, true);
 var certRes = certSigner.sign({'statement':'Hello signed world!'});
-console.log(certRes);
+console.log(JSON.stringify(certRes));
 new JCS.Verifier().decodeSignature(certRes);
 
 CertRead.scanCerts();
