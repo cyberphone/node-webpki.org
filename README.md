@@ -170,13 +170,15 @@ var result = verifier.decodeSignature(signedJavaScript);
 console.log('Validation success=' + result.verifyHmac(secretKey));
 ```
 
+And here is the result (after "beautifying")... 
+
 ```json
 {
-    "statement": "Hello signed world!",
-    "signature": {
-        "algorithm": "HS256",
-        "keyId": "mykey",
-        "value": "IcC43Ecr11NPF01n6pj540OYvpVeUp3-wyxJ_cY_Yf4"
-    }
+ "statement": "Hello signed world!",
+  "signature": {
+    "algorithm": "HS256",
+    "keyId": "mykey",
+    "value": "IcC43Ecr11NPF01n6pj540OYvpVeUp3-wyxJ_cY_Yf4"
+  }
 }
 ```
