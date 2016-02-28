@@ -175,7 +175,7 @@ And here is the result (after "beautifying")...
 ```json
 {
  "statement": "Hello signed world!",
-  "signature": {
+ "signature": {
     "algorithm": "HS256",
     "keyId": "mykey",
     "value": "IcC43Ecr11NPF01n6pj540OYvpVeUp3-wyxJ_cY_Yf4"
