@@ -1,7 +1,6 @@
 'use strict';
 
 const FS = require('fs');
-const Crypto = require('crypto');
 
 const Keys = require('webpki.org').Keys;
 const JCS = require('webpki.org').JCS;
