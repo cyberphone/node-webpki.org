@@ -58,8 +58,8 @@ for (var q = 0; q < 1000; q++) {
   new JCS.Verifier().decodeSignature(new JCS.Signer(privateEcP256Pkcs1Key).sign({'statement':'Hello signed world!'}));
 }
 
-var certSigner = new JCS.Signer(privateEcP256Pkcs1Key);
-certSigner.setCertificatePath(ecCertificatePath, true);
+var certSigner = new JCS.Signer(privateEcP256Pkcs1Key)
+  .setCertificatePath(ecCertificatePath, true);
 var certRes = certSigner.sign({'statement':'Hello signed world!'});
 console.log(JSON.stringify(certRes));
 new JCS.Verifier().decodeSignature(certRes);
