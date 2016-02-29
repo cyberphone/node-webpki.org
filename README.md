@@ -5,6 +5,23 @@ Very early documentation, stay tuned :-)
 JCS rationale: https://cyberphone.github.io/openkeystore/resources/docs/jsonsignatures.html<br>
 JCS specification: https://cyberphone.github.io/openkeystore/resources/docs/jcs.html
 
+### Installation
+
+There is no npm yet but you can test this code anyway by downloading the zip
+to a free directory and then perform three steps:
+```bat
+C:\node-webpki.org-master>mkdir node_modules
+C:\node-webpki.org-master>mkdir node_modules\webpki.org
+C:\node-webpki.org-master>copy package.json node_modules\webpki.org
+```
+
+The you should be able to run demo and test programs:
+```bat
+C:\node-webpki.org-master>node democert.js
+{"statement":"Hello signed world!", etc etc etc}
+Validation success=true
+```
+
 ### Create a signed object
 
 ```JavaScript
