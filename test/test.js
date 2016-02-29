@@ -44,6 +44,9 @@ function signStuff(privateKey, algorithm) {
   var res = new JCS.Signer(privateKey, algorithm).sign({'statement':'Hello signed world!'});
   console.log(JSON.stringify(res));
   var result = new JCS.Verifier().decodeSignature(res);
+  if (result.getSignatureType() != JCS.SIGNATURE_TYPE.PUBLIC_KEY) {
+    throw new TypeError('Wrong signature type');
+  }
   console.log(' PUB=' + result.verifyPublicKey(publicEcP256Key) + 
               ' PEML=' + result.getPublicKey().pem.length + 
               ' SPKIL=' + result.getPublicKey().getSPKI().length + 
@@ -62,7 +65,9 @@ var certSigner = new JCS.Signer(privateEcP256Pkcs1Key)
   .setCertificatePath(ecCertificatePath, true);
 var certRes = certSigner.sign({'statement':'Hello signed world!'});
 console.log(JSON.stringify(certRes));
-new JCS.Verifier().decodeSignature(certRes);
+if (new JCS.Verifier().decodeSignature(certRes).getSignatureType() != JCS.SIGNATURE_TYPE.PKI) {
+  throw new TypeError('Expected PKI');
+}
 
 CertRead.scanCerts();
 
@@ -153,4 +158,8 @@ C_LZMOTsgJqDT8mOvHyZpLH_f7u55mXDBoXF0iG9sikiRVndkJ18wZmNRow2UmK3QB6G2kUYxt3ltPOj
 var secretKey = new Buffer('F4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
 var hmac = new JCS.Signer(secretKey, 'HS256').setKeyId('mykey').sign({'k':6});
 console.log(JSON.stringify(hmac));
-console.log('hmac=' + new JCS.Verifier().decodeSignature(hmac).verifyHmac(secretKey));
+var hmacDecoder = new JCS.Verifier().decodeSignature(hmac);
+if (hmacDecoder.getSignatureType() != JCS.SIGNATURE_TYPE.HMAC) {
+  throw new TypeError('Wrong kind of signature');
+}
+console.log('hmac=' + hmacDecoder.verifyHmac(secretKey));
