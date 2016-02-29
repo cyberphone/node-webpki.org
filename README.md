@@ -92,7 +92,7 @@ const JCS = require('webpki.org').JCS;
 // Load private key and certificate path
 const keyData = FS.readFileSync(__dirname + '/test/mybank-cert-and-key-p256.pem');
 const privateKey = Keys.createPrivateKeyFromPEM(keyData);
-const certificatePath = Keys.createCertificatePathFromPEM(keyData);
+const certificatePath = Keys.createCertificatesFromPEM(keyData);
 
 // Initiate the signer
 var signer = new JCS.Signer(privateKey);
@@ -134,7 +134,23 @@ This sample would generate the following (albeit a bit "beautified") JSON:
 
 ###Validation of Certificate Paths
 
-T.B.D.
+Validation requires that you provide a collection of CA certificates.
+
+```javascript
+// Now we could verify the signed object we just created
+
+// Load trust store
+const trustedCAs = Keys.createCertificatesFromPEM(FS.readFileSync(__dirname + '/test/payment-network-ca.pem'));
+
+// Create a verifier object
+var verifier = new JCS.Verifier();
+
+// Call decoding.  This will check that signature is technically correct
+var result = verifier.decodeSignature(signedJavaScript);
+
+// Now check if the certificate path is trusted
+console.log('Validation success=' + result.isTrusted(trustedCAs));
+```
 
 ###HMAC Signatures
 

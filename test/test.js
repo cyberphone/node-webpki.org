@@ -37,7 +37,7 @@ function readFile(path) {
 const publicEcP256Key = Keys.createPublicKeyFromPEM(readFile('public-p256.pem'));
 const privateEcP256Pkcs1Key = Keys.createPrivateKeyFromPEM(readFile('private-p256-pkcs1.pem'));
 console.log(privateEcP256Pkcs1Key);
-const ecCertificatePath = Keys.createCertificatePathFromPEM(readFile('certificate-p256.pem'));
+const ecCertificatePath = Keys.createCertificatesFromPEM(readFile('certificate-p256.pem'));
 const privateRsaPkcs8Key = Keys.createPrivateKeyFromPEM(readFile('private-rsa-pkcs8.pem'));
 
 function signStuff(privateKey, algorithm) {

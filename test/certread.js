@@ -111,7 +111,7 @@ function scanCerts() {
   try {
     certReader(unsupported_ec_curve);
   } catch (err) {
-    if (err.toString().indexOf('Tag mismatch, expected: 6 got: 48') < 0) {
+    if (err.toString().indexOf('Malformed signature algorithm') < 0) {
       throw new TypeError('Cert error error');
     }
   } 
