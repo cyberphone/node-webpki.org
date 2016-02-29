@@ -15,7 +15,7 @@ C:\node-webpki.org-master>mkdir node_modules\webpki.org
 C:\node-webpki.org-master>copy package.json node_modules\webpki.org
 ```
 
-The you should be able to run demo and test programs:
+Then you should be able to run the supplied demo and test programs:
 ```bat
 C:\node-webpki.org-master>node democert.js
 {"statement":"Hello signed world!", etc etc etc}
