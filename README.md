@@ -8,6 +8,7 @@ JCS specification: https://cyberphone.github.io/openkeystore/resources/docs/jcs.
 ### Installation
 
 There is no npm yet but you can test this code anyway by downloading the zip
+https://github.com/cyberphone/node-webpki.org/archive/master.zip
 to a free directory and then perform three steps:
 ```bat
 C:\node-webpki.org-master>mkdir node_modules
