@@ -69,7 +69,7 @@ const publicKey = readPublicKey('public-p256.pem');
 // Create a verifier object
 var verifier = new JCS.Verifier();
 
-// Call decoding.  This will check that signature is technically correct
+// Call decoding.  This will check that the signature is technically correct
 var result = verifier.decodeSignature(signedJavaScript);
 
 // Now check if the anticipated key was used
@@ -145,7 +145,7 @@ const trustedCAs = Keys.createCertificatesFromPEM(FS.readFileSync(__dirname + '/
 // Create a verifier object
 var verifier = new JCS.Verifier();
 
-// Call decoding.  This will check that signature is technically correct
+// Call decoding.  This will check that the signature is technically correct
 var result = verifier.decodeSignature(signedJavaScript);
 
 // Now check if the certificate path is trusted
@@ -179,7 +179,7 @@ console.log(JSON.stringify(signedJavaScript));
 // Create a verifier object
 var verifier = new JCS.Verifier();
 
-// Call decoding.  This will check that signature is technically correct
+// Call decoding.  This will check that the signature is technically correct
 var result = verifier.decodeSignature(signedJavaScript);
 
 // Now check the result
