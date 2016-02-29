@@ -47,10 +47,6 @@ function signStuff(privateKey, algorithm) {
   if (result.getSignatureType() != JCS.SIGNATURE_TYPE.PUBLIC_KEY) {
     throw new TypeError('Wrong signature type');
   }
-  console.log(' PUB=' + result.verifyPublicKey(publicEcP256Key) + 
-              ' PEML=' + result.getPublicKey().pem.length + 
-              ' SPKIL=' + result.getPublicKey().getSPKI().length + 
-              ' SA=' + result.signatureAlgorithm);
 }
 
 signStuff(privateEcP256Pkcs1Key);
