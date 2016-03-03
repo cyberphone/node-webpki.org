@@ -36,13 +36,11 @@ function readFile(path) {
 
 const publicEcP256Key = Keys.createPublicKeyFromPEM(readFile('public-p256.pem'));
 const privateEcP256Pkcs1Key = Keys.createPrivateKeyFromPEM(readFile('private-p256-pkcs1.pem'));
-console.log(privateEcP256Pkcs1Key);
 const ecCertificatePath = Keys.createCertificatesFromPEM(readFile('certificate-p256.pem'));
 const privateRsaPkcs8Key = Keys.createPrivateKeyFromPEM(readFile('private-rsa-pkcs8.pem'));
 
 function signStuff(privateKey, algorithm) {
   var res = new JCS.Signer(privateKey, algorithm).sign({'statement':'Hello signed world!'});
-  console.log(JSON.stringify(res));
   var result = new JCS.Verifier().decodeSignature(res);
   if (result.getSignatureType() != JCS.SIGNATURE_TYPE.PUBLIC_KEY) {
     throw new TypeError('Wrong signature type');
@@ -114,8 +112,6 @@ function base64run() {
 
 function encodePublicKey(key, spkiBase64URL) {
   var spki = Base64URL.decode(spkiBase64URL);
-  console.log();
-  console.log(key.jcs);
   if (key.pem != '-----BEGIN PUBLIC KEY-----\n' +
                  new Buffer(spki).toString('base64') +
                  '\n-----END PUBLIC KEY-----\n') {

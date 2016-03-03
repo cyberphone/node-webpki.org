@@ -65,8 +65,9 @@ assert.equal(sender.computeSecret(receiver_public_key, 'binary', 'binary'),
 
 // ECDH test data
 
-const ECDH_RESULT_WITH_KDF    = 'hzHdlfQIAEehb8Hrd_mFRhKsKLEzPfshfXs9l6areCc';
-const ECDH_RESULT_WITHOUT_KDF = 'SzFxLgluXyC07Pl5D9jMfIt-LIrZC9qByyJPYsDnuaY';
+const ECDH_RESULT_WITH_KDF       = 'hzHdlfQIAEehb8Hrd_mFRhKsKLEzPfshfXs9l6areCc';
+const ECDH_RESULT_WITHOUT_KDF    = 'SzFxLgluXyC07Pl5D9jMfIt-LIrZC9qByyJPYsDnuaY';
+const JOSE_A128CBC_HS256_ALG_ID  = 'A128CBC-HS256';
 
 const ECHD_TEST_PRIVATE_KEY = 
 '-----BEGIN PRIVATE KEY-----\
@@ -86,12 +87,17 @@ const test_private_key =
 const test_public_key =
    Keys.createPublicKeyFromPEM(ECHD_TEST_PUBLIC_KEY);
 
-// ECDH Static
-var ec = new Encryption.ECDH(test_private_key);
-assert.equal(Base64URL.encode(ec.computeSecret(test_public_key)), ECDH_RESULT_WITHOUT_KDF);
+// ECDH Static-Static
+const ec1 = new Encryption.ECDH(test_private_key);
+assert.equal(Base64URL.encode(ec1.computeZ(test_public_key)), ECDH_RESULT_WITHOUT_KDF);
 
-// ECDH Ephemeral Static
-var ecStatic = new Encryption.ECDH(test_private_key);
-var ecEphemeral = new Encryption.ECDH(test_private_key.getPublicKey());
-assert.deepEqual(ecStatic.computeSecret(ecEphemeral.getPublicKey()),
-                 ecEphemeral.computeSecret(test_private_key.getPublicKey()));
+// ECDH Static-Static
+const ec2 = new Encryption.ECDH(test_private_key);
+assert.equal(Base64URL.encode(ec2.computeWithKDF(test_public_key, 
+                                                 JOSE_A128CBC_HS256_ALG_ID)), ECDH_RESULT_WITH_KDF);
+
+// ECDH Ephemeral-Static
+const ecStatic = new Encryption.ECDH(test_private_key);
+const ecEphemeral = new Encryption.ECDH(test_private_key.getPublicKey());
+assert.deepEqual(ecStatic.computeZ(ecEphemeral.getPublicKey()),
+                 ecEphemeral.computeZ(test_private_key.getPublicKey()));
