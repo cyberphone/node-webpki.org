@@ -87,3 +87,4 @@ function ephemeralEphemeral(publicKey) {
 ephemeralEphemeral(readPublicKey('private-ec-p521-key.pem'));
 ephemeralEphemeral(readPublicKey('private-p256-pkcs1.pem'));
 ephemeralEphemeral(readPublicKey('mybank-cert-and-key-p256.pem'));
+

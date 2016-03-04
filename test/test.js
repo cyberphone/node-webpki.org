@@ -24,11 +24,14 @@
 // Unit testing suite
 
 const FS = require('fs');
+const assert = require('assert');
 
 const Keys = require('..').Keys;
 const Base64URL = require('..').Base64URL;
 const JCS = require('..').JCS;
 const CertRead = require('./certread');
+const Hash = require('..').Hash;
+const Random = require('../lib/random');
 
 function readFile(path) {
   return FS.readFileSync(__dirname + '/' + path).toString();
@@ -155,3 +158,16 @@ if (hmacDecoder.getSignatureType() != JCS.SIGNATURE_TYPE.HMAC) {
   throw new TypeError('Wrong kind of signature');
 }
 console.log('hmac=' + hmacDecoder.verifyHmac(secretKey));
+
+function hashJsonObject(hashAlgorithm, expectedResult) {
+  assert.equal(Base64URL.encode(Hash.hashObject(hashAlgorithm, 
+                                                { property: 'Text \u0000 \n \u20ac \u00d6' })),
+               expectedResult);
+}
+
+hashJsonObject('SHA256', 'P3IwEoCLP4Su7ImnobuIybAcDvpUxPSXY0GgCQPWAms');
+hashJsonObject('SHA384', '5pPdhqLxgNq6BotieCcc5I3GjwpYuIX4D2z2AWk_hlbP9yZg2gh57ZkLnwN2OBii');
+hashJsonObject('SHA512', '16bFgJsInlap0tWJnLeDH8UUvZvBLUbrJrfiKLfseiGV5-RL_5MNDTzK8Y_IaIimB3DUXZxFGoU655GWPeoZjw');
+
+assert.equal(Random.generateRandomNumber(5).length, 5);
+assert.equal(Random.generateRandomNumber(64).length, 64);
