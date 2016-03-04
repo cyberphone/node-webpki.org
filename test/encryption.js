@@ -32,42 +32,10 @@ const ByteArray = require('../lib/bytearray');
 const Base64URL = require('../lib/base64url');
 const Encryption = require('../lib/encryption');
 
-// Generate Alice's keys...
-const alice = crypto.createECDH('secp521r1');
-const alice_key = alice.generateKeys();
-
-// Generate Bob's keys...
-const bob = crypto.createECDH('secp521r1');
-const bob_key = bob.generateKeys();
-
-// Exchange and generate the secret...
-const alice_secret = alice.computeSecret(bob_key);
-const bob_secret = bob.computeSecret(alice_key);
-
-assert.deepEqual(alice_secret, bob_secret);
-
-function readFile(path) {
-  return FS.readFileSync(__dirname + '/' + path).toString();
-}
-
-const receiver_private_key =
-   Keys.createPrivateKeyFromPEM(readFile('private-p256-pkcs1.pem')).ecPrivateKeyBlob;
-const receiver_public_key =
-   Keys.createPublicKeyFromPEM(readFile('public-p256.pem')).ecPublicKeyBlob;
-
-const receiver = crypto.createECDH('prime256v1');
-receiver.setPrivateKey(receiver_private_key, 'binary');
-
-const sender = crypto.createECDH('prime256v1');
-const sender_public_key = sender.generateKeys('binary','uncompressed');
-assert.equal(sender.computeSecret(receiver_public_key, 'binary', 'binary'),
-             receiver.computeSecret(sender_public_key, 'binary', 'binary'));
-
 // ECDH test data
 
 const ECDH_RESULT_WITH_KDF       = 'hzHdlfQIAEehb8Hrd_mFRhKsKLEzPfshfXs9l6areCc';
 const ECDH_RESULT_WITHOUT_KDF    = 'SzFxLgluXyC07Pl5D9jMfIt-LIrZC9qByyJPYsDnuaY';
-const JOSE_A128CBC_HS256_ALG_ID  = 'A128CBC-HS256';
 
 const ECHD_TEST_PRIVATE_KEY = 
 '-----BEGIN PRIVATE KEY-----\
@@ -94,10 +62,28 @@ assert.equal(Base64URL.encode(ec1.computeZ(test_public_key)), ECDH_RESULT_WITHOU
 // ECDH Static-Static
 const ec2 = new Encryption.ECDH(test_private_key);
 assert.equal(Base64URL.encode(ec2.computeWithKDF(test_public_key, 
-                                                 JOSE_A128CBC_HS256_ALG_ID)), ECDH_RESULT_WITH_KDF);
+                                                 Encryption.JOSE_A128CBC_HS256_ALG_ID)),
+             ECDH_RESULT_WITH_KDF);
 
 // ECDH Ephemeral-Static
 const ecStatic = new Encryption.ECDH(test_private_key);
 const ecEphemeral = new Encryption.ECDH(test_private_key.getPublicKey());
 assert.deepEqual(ecStatic.computeZ(ecEphemeral.getPublicKey()),
                  ecEphemeral.computeZ(test_private_key.getPublicKey()));
+                 
+// ECDH Ephemeral-Ephemeral
+
+function readPublicKey(path) {
+  return Keys.createPrivateKeyFromPEM(FS.readFileSync(__dirname + '/' + path)).getPublicKey();
+}
+
+function ephemeralEphemeral(publicKey) {
+  var one = new Encryption.ECDH(publicKey);
+  var two = new Encryption.ECDH(publicKey);
+  assert.deepEqual(one.computeZ(two.getPublicKey()),
+                   two.computeZ(one.getPublicKey()));
+}
+                   
+ephemeralEphemeral(readPublicKey('private-ec-p521-key.pem'));
+ephemeralEphemeral(readPublicKey('private-p256-pkcs1.pem'));
+ephemeralEphemeral(readPublicKey('mybank-cert-and-key-p256.pem'));
