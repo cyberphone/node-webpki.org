@@ -26,3 +26,4 @@ exports.Base64URL = require('./lib/base64url');
 exports.JCS = require('./lib/jcs');
 exports.Util = require('./lib/util');
 exports.Hex = require('./lib/hex');
+exports.JSONReader = require('./lib/jsonreader');
