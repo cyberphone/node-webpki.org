@@ -24,10 +24,10 @@
 // Unit testing suite for certificates
 
 const Keys = require('..').Keys;
-const Base64URL = require('..').Base64URL;
+const Base64Url = require('..').Base64Url;
 
 function certReader (certInBase64URL) {
-  var certData = new Keys.Certificate(Base64URL.decode(certInBase64URL));
+  var certData = new Keys.Certificate(Base64Url.decode(certInBase64URL));
   console.log('Certificate with SN=' + certData.getSerialNumber().toString() + '\n' +
               certData.getIssuer() + '\n' + certData.getSubject() + '\n' +
               certData.getPublicKey().getJCS());

@@ -28,7 +28,7 @@ const FS = require('fs');
 
 const Keys = require('../lib/keys');
 const ByteArray = require('../lib/bytearray');
-const Base64URL = require('../lib/base64url');
+const Base64Url = require('../lib/base64url');
 const Encryption = require('../lib/encryption');
 
 // ECDH test data
@@ -56,11 +56,11 @@ const test_public_key =
 
 // ECDH Static-Static
 const ec1 = new Encryption.ECDH(test_private_key);
-Assert.equal(Base64URL.encode(ec1.computeZ(test_public_key)), ECDH_RESULT_WITHOUT_KDF);
+Assert.equal(Base64Url.encode(ec1.computeZ(test_public_key)), ECDH_RESULT_WITHOUT_KDF);
 
 // ECDH Static-Static
 const ec2 = new Encryption.ECDH(test_private_key);
-Assert.equal(Base64URL.encode(ec2.computeWithKDF(test_public_key, 
+Assert.equal(Base64Url.encode(ec2.computeWithKDF(test_public_key, 
                                                  Encryption.JOSE_A128CBC_HS256_ALG_ID)),
              ECDH_RESULT_WITH_KDF);
 
@@ -94,7 +94,7 @@ var aesData = new Uint8Array([5,4,3,2,1]);
 var cipher = Crypto.createCipheriv('aes-128-cbc', aesKey, aesIv);
 cipher.update(aesData);
 var aesRes = cipher.final();
-console.log('L=' + aesRes.length + ' D=' + Base64URL.encode(aesRes));
+console.log('L=' + aesRes.length + ' D=' + Base64Url.encode(aesRes));
 cipher = Crypto.createDecipheriv('aes-128-cbc', aesKey, aesIv);
 cipher.update(aesRes);
 Assert.deepEqual(new Uint8Array(cipher.final()), aesData);

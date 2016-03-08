@@ -27,7 +27,7 @@ const FS = require('fs');
 const assert = require('assert');
 
 const Keys = require('..').Keys;
-const Base64URL = require('..').Base64URL;
+const Base64Url = require('..').Base64Url;
 const JCS = require('..').JCS;
 const CertRead = require('./certread');
 const Hash = require('..').Hash;
@@ -75,9 +75,9 @@ function base64run() {
       for (var j = 0; j < i; j++) {
         iarr[j] =  Math.floor(Math.random()*256);
       }
-      var b64 = Base64URL.encode(iarr);
-//      console.log('Base64URL=' + b64);
-      var arr = Base64URL.decode(b64);
+      var b64 = Base64Url.encode(iarr);
+//      console.log('Base64Url=' + b64);
+      var arr = Base64Url.decode(b64);
       if (arr.length != iarr.length) throw 'Length error';
       for (var q = 0; q < arr.length; q++) {
         if (arr[q] != iarr[q]) throw 'Content error: ' + b64;
@@ -86,7 +86,7 @@ function base64run() {
   }
   var shouldFail = true;
   try {
-    var h = Base64URL.decode('a');
+    var h = Base64Url.decode('a');
   } catch (e) {
     shouldFail = false;
   }
@@ -95,7 +95,7 @@ function base64run() {
   }
   shouldFail = true;
   try {
-    var h = Base64URL.decode('+xdFdYg');
+    var h = Base64Url.decode('+xdFdYg');
   } catch (e) {
     shouldFail = false;
   }
@@ -104,7 +104,7 @@ function base64run() {
   }
   shouldFail = true;
   try {
-    var h = Base64URL.decode('/xdFdYg');
+    var h = Base64Url.decode('/xdFdYg');
   } catch (e) {
     shouldFail = false;
   }
@@ -114,7 +114,7 @@ function base64run() {
 }
 
 function encodePublicKey(key, spkiBase64URL) {
-  var spki = Base64URL.decode(spkiBase64URL);
+  var spki = Base64Url.decode(spkiBase64URL);
   if (key.pem != '-----BEGIN PUBLIC KEY-----\n' +
                  new Buffer(spki).toString('base64') +
                  '\n-----END PUBLIC KEY-----\n') {
@@ -160,7 +160,7 @@ if (hmacDecoder.getSignatureType() != JCS.SIGNATURE_TYPE.HMAC) {
 console.log('hmac=' + hmacDecoder.verifyHmac(secretKey));
 
 function hashJsonObject(hashAlgorithm, expectedResult) {
-  assert.equal(Base64URL.encode(Hash.hashObject(hashAlgorithm, 
+  assert.equal(Base64Url.encode(Hash.hashObject(hashAlgorithm, 
                                                 { property: 'Text \u0000 \n \u20ac \u00d6' })),
                expectedResult);
 }
