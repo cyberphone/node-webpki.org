@@ -32,6 +32,10 @@ const JCS = require('..').JCS;
 const CertRead = require('./certread');
 const Hash = require('..').Hash;
 const Random = require('../lib/random');
+const Logging = require('../lib/logging');
+
+var logger = new Logging.Logger(__filename);
+logger.info('Starting');
 
 function readFile(path) {
   return FS.readFileSync(__dirname + '/' + path).toString();
@@ -171,3 +175,5 @@ hashJsonObject('SHA512', '16bFgJsInlap0tWJnLeDH8UUvZvBLUbrJrfiKLfseiGV5-RL_5MNDT
 
 assert.equal(Random.generateRandomNumber(5).length, 5);
 assert.equal(Random.generateRandomNumber(64).length, 64);
+
+logger.info('Done!');

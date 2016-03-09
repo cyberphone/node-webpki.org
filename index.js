@@ -27,3 +27,4 @@ exports.JCS = require('./lib/jcs');
 exports.Hex = require('./lib/hex');
 exports.JsonUtil = require('./lib/jsonutil');
 exports.DateTime = require('./lib/datetime');
+exports.Logging = require('./lib/logging');
