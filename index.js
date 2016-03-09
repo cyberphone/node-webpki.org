@@ -24,6 +24,6 @@ exports.Random = require('./lib/random');
 exports.ByteArray = require('./lib/bytearray');
 exports.Base64Url = require('./lib/base64url');
 exports.JCS = require('./lib/jcs');
-exports.Util = require('./lib/util');
 exports.Hex = require('./lib/hex');
 exports.JsonUtil = require('./lib/jsonutil');
+exports.DateTime = require('./lib/datetime');
