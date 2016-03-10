@@ -24,14 +24,14 @@
 // NOT READY
 
 const Assert = require('assert');
-const FS = require('fs');
+const Fs = require('fs');
 
 const Keys = require('../lib/keys');
 const ByteArray = require('../lib/bytearray');
 const Base64Url = require('../lib/base64url');
 const Encryption = require('../lib/encryption');
 
-// ECDH test data
+// Ecdh test data
 
 const ECDH_RESULT_WITH_KDF       = 'hzHdlfQIAEehb8Hrd_mFRhKsKLEzPfshfXs9l6areCc';
 const ECDH_RESULT_WITHOUT_KDF    = 'SzFxLgluXyC07Pl5D9jMfIt-LIrZC9qByyJPYsDnuaY';
@@ -50,35 +50,35 @@ YoDwFACwiYZ4BLjp/JbDkyFh8ZNPQiMGkXDZJLfgO/giuw==\
 -----END PUBLIC KEY-----';
 
 const test_private_key =
-   Keys.createPrivateKeyFromPEM(ECHD_TEST_PRIVATE_KEY);
+   Keys.createPrivateKeyFromPem(ECHD_TEST_PRIVATE_KEY);
 const test_public_key =
-   Keys.createPublicKeyFromPEM(ECHD_TEST_PUBLIC_KEY);
+   Keys.createPublicKeyFromPem(ECHD_TEST_PUBLIC_KEY);
 
 // ECDH Static-Static
-const ec1 = new Encryption.ECDH(test_private_key);
+const ec1 = new Encryption.Ecdh(test_private_key);
 Assert.equal(Base64Url.encode(ec1.computeZ(test_public_key)), ECDH_RESULT_WITHOUT_KDF);
 
 // ECDH Static-Static
-const ec2 = new Encryption.ECDH(test_private_key);
-Assert.equal(Base64Url.encode(ec2.computeWithKDF(test_public_key, 
+const ec2 = new Encryption.Ecdh(test_private_key);
+Assert.equal(Base64Url.encode(ec2.computeWithKdf(test_public_key, 
                                                  Encryption.JOSE_A128CBC_HS256_ALG_ID)),
              ECDH_RESULT_WITH_KDF);
 
 // ECDH Ephemeral-Static
-const ecStatic = new Encryption.ECDH(test_private_key);
-const ecEphemeral = new Encryption.ECDH(test_private_key.getPublicKey());
+const ecStatic = new Encryption.Ecdh(test_private_key);
+const ecEphemeral = new Encryption.Ecdh(test_private_key.getPublicKey());
 Assert.deepEqual(ecStatic.computeZ(ecEphemeral.getPublicKey()),
                  ecEphemeral.computeZ(test_private_key.getPublicKey()));
                  
 // ECDH Ephemeral-Ephemeral
 
 function readPublicKey(path) {
-  return Keys.createPrivateKeyFromPEM(FS.readFileSync(__dirname + '/' + path)).getPublicKey();
+  return Keys.createPrivateKeyFromPem(Fs.readFileSync(__dirname + '/' + path)).getPublicKey();
 }
 
 function ephemeralEphemeral(publicKey) {
-  var one = new Encryption.ECDH(publicKey);
-  var two = new Encryption.ECDH(publicKey);
+  var one = new Encryption.Ecdh(publicKey);
+  var two = new Encryption.Ecdh(publicKey);
   Assert.deepEqual(one.computeZ(two.getPublicKey()),
                    two.computeZ(one.getPublicKey()));
 }

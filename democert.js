@@ -1,17 +1,17 @@
 'use strict';
 
-const FS = require('fs');
+const Fs = require('fs');
 
 const Keys = require('webpki.org').Keys;
-const JCS = require('webpki.org').JCS;
+const Jcs = require('webpki.org').Jcs;
 
 // Load private key and certificate path
-const keyData = FS.readFileSync(__dirname + '/test/mybank-cert-and-key-p256.pem');
-const privateKey = Keys.createPrivateKeyFromPEM(keyData);
-const certificatePath = Keys.createCertificatesFromPEM(keyData);
+const keyData = Fs.readFileSync(__dirname + '/test/mybank-cert-and-key-p256.pem');
+const privateKey = Keys.createPrivateKeyFromPem(keyData);
+const certificatePath = Keys.createCertificatesFromPem(keyData);
 
 // Initiate the signer
-var signer = new JCS.Signer(privateKey);
+var signer = new Jcs.Signer(privateKey);
 
 // Indicate that we want to include a certificate path
 signer.setCertificatePath(certificatePath, true);
@@ -28,10 +28,10 @@ console.log(JSON.stringify(signedJavaScript));
 // Now we could verify the signed object we just created
 
 // Load trust store
-const trustedCAs = Keys.createCertificatesFromPEM(FS.readFileSync(__dirname + '/test/payment-network-ca.pem'));
+const trustedCAs = Keys.createCertificatesFromPem(Fs.readFileSync(__dirname + '/test/payment-network-ca.pem'));
 
 // Create a verifier object
-var verifier = new JCS.Verifier();
+var verifier = new Jcs.Verifier();
 
 // Call decoding.  This will check that signature is technically correct
 var result = verifier.decodeSignature(signedJavaScript);

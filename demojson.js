@@ -1,6 +1,6 @@
 'use strict';
 
-const FS = require('fs');
+const Fs = require('fs');
 const Assert = require('assert');
 
 const JsonUtil = require('webpki.org').JsonUtil;

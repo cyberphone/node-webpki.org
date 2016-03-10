@@ -23,12 +23,12 @@
 
 // Unit testing suite
 
-const FS = require('fs');
+const Fs = require('fs');
 const assert = require('assert');
 
 const Keys = require('..').Keys;
 const Base64Url = require('..').Base64Url;
-const JCS = require('..').JCS;
+const Jcs = require('..').Jcs;
 const CertRead = require('./certread');
 const Hash = require('..').Hash;
 const Random = require('../lib/random');
@@ -38,18 +38,18 @@ var logger = new Logging.Logger(__filename);
 logger.info('Starting');
 
 function readFile(path) {
-  return FS.readFileSync(__dirname + '/' + path).toString();
+  return Fs.readFileSync(__dirname + '/' + path).toString();
 }
 
-const publicEcP256Key = Keys.createPublicKeyFromPEM(readFile('public-p256.pem'));
-const privateEcP256Pkcs1Key = Keys.createPrivateKeyFromPEM(readFile('private-p256-pkcs1.pem'));
-const ecCertificatePath = Keys.createCertificatesFromPEM(readFile('certificate-p256.pem'));
-const privateRsaPkcs8Key = Keys.createPrivateKeyFromPEM(readFile('private-rsa-pkcs8.pem'));
+const publicEcP256Key = Keys.createPublicKeyFromPem(readFile('public-p256.pem'));
+const privateEcP256Pkcs1Key = Keys.createPrivateKeyFromPem(readFile('private-p256-pkcs1.pem'));
+const ecCertificatePath = Keys.createCertificatesFromPem(readFile('certificate-p256.pem'));
+const privateRsaPkcs8Key = Keys.createPrivateKeyFromPem(readFile('private-rsa-pkcs8.pem'));
 
 function signStuff(privateKey, algorithm) {
-  var res = new JCS.Signer(privateKey, algorithm).sign({'statement':'Hello signed world!'});
-  var result = new JCS.Verifier().decodeSignature(res);
-  if (result.getSignatureType() != JCS.SIGNATURE_TYPE.PUBLIC_KEY) {
+  var res = new Jcs.Signer(privateKey, algorithm).sign({'statement':'Hello signed world!'});
+  var result = new Jcs.Verifier().decodeSignature(res);
+  if (result.getSignatureType() != Jcs.SIGNATURE_TYPE.PUBLIC_KEY) {
     throw new TypeError('Wrong signature type');
   }
 }
@@ -59,14 +59,14 @@ signStuff(privateEcP256Pkcs1Key, 'ES512');
 signStuff(privateRsaPkcs8Key);
 
 for (var q = 0; q < 1000; q++) {
-  new JCS.Verifier().decodeSignature(new JCS.Signer(privateEcP256Pkcs1Key).sign({'statement':'Hello signed world!'}));
+  new Jcs.Verifier().decodeSignature(new Jcs.Signer(privateEcP256Pkcs1Key).sign({'statement':'Hello signed world!'}));
 }
 
-var certSigner = new JCS.Signer(privateEcP256Pkcs1Key)
+var certSigner = new Jcs.Signer(privateEcP256Pkcs1Key)
   .setCertificatePath(ecCertificatePath, true);
 var certRes = certSigner.sign({'statement':'Hello signed world!'});
 console.log(JSON.stringify(certRes));
-if (new JCS.Verifier().decodeSignature(certRes).getSignatureType() != JCS.SIGNATURE_TYPE.PKI) {
+if (new Jcs.Verifier().decodeSignature(certRes).getSignatureType() != Jcs.SIGNATURE_TYPE.PKI) {
   throw new TypeError('Expected PKI');
 }
 
@@ -124,7 +124,7 @@ function encodePublicKey(key, spkiBase64URL) {
                  '\n-----END PUBLIC KEY-----\n') {
     throw new TypeError('Key mismatch: ' + spkiBase64URL);
   }
-  Keys.createPublicKeyFromPEM(key.pem);
+  Keys.createPublicKeyFromPem(key.pem);
 }
 
 base64run();
@@ -155,10 +155,10 @@ BCDmXImhOHxbhRvyiY2XWcDFAGt_60IzLAnPUof2Rv-aPNYJY6qa0yvnJmQp4yNPsIpHYpj9Sa3rctEC
 C_LZMOTsgJqDT8mOvHyZpLH_f7u55mXDBoXF0iG9sikiRVndkJ18wZmNRow2UmK3QB6G2kUYxt3ltPOjDgADLKwIDAQAB');
 
 var secretKey = new Buffer('F4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
-var hmac = new JCS.Signer(secretKey, 'HS256').setKeyId('mykey').sign({'k':6});
+var hmac = new Jcs.Signer(secretKey, 'HS256').setKeyId('mykey').sign({'k':6});
 console.log(JSON.stringify(hmac));
-var hmacDecoder = new JCS.Verifier().decodeSignature(hmac);
-if (hmacDecoder.getSignatureType() != JCS.SIGNATURE_TYPE.HMAC) {
+var hmacDecoder = new Jcs.Verifier().decodeSignature(hmac);
+if (hmacDecoder.getSignatureType() != Jcs.SIGNATURE_TYPE.HMAC) {
   throw new TypeError('Wrong kind of signature');
 }
 console.log('hmac=' + hmacDecoder.verifyHmac(secretKey));
