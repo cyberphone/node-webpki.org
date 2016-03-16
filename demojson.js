@@ -5,6 +5,7 @@ const Assert = require('assert');
 
 const JsonUtil = require('webpki.org').JsonUtil;
 const Base64Url = require('webpki.org').Base64Url;
+const ByteArray = require('webpki.org').ByteArray;
 
 const someObject = {
 
@@ -37,9 +38,15 @@ Assert.throws(
   }
 );
 
-var aReader = reader.getArrayReader('arr');
+var aReader = reader.getArray('arr');
 aReader.getString();
-var inner = aReader.getObjectReader();
+var inner = aReader.getObject();
 inner.getInt('inti');
 
 reader.checkForUnread();
+
+var utf8bin = new Uint8Array([0xE2, 0x82, 0xAC, 0xC3, 0xA5, 0xC3, 0xB6, 0x6B]);
+var theString = '\u20ac\u00e5\u00f6\k';
+Assert.equal(ByteArray.utf8ToString(utf8bin), theString);
+Assert.deepEqual(ByteArray.stringToUtf8(theString), utf8bin);
+
