@@ -104,14 +104,15 @@ Assert.deepEqual(ecdhRes.sharedSecret,
                                                  ecdhRes.publicKey,
                                                  test_private_key));
 
-var unEncJson = new JsonUtil.ObjectReader({hi:'\u20ac\u00e5\u00f6\k'});
+var unEncJson = new JsonUtil.ObjectReader({hi:'\u20ac\u00e5\u00f6k'});
 var binJson = unEncJson.getNormalizedData();
 var encJson = new JsonUtil.ObjectReader(EncryptedData.encode(unEncJson,
-                                   Encryption.JOSE_A128CBC_HS256_ALG_ID,
-                                   test_private_key.getPublicKey(),
-                                   Encryption.JOSE_ECDH_ES_ALG_ID).getRootObject());
-Assert.deepEqual(binJson,
-new EncryptedData(encJson).getDecryptedData([test_private_key]).getNormalizedData());
+                                        Encryption.JOSE_A128CBC_HS256_ALG_ID,
+                                        test_private_key.getPublicKey(),
+                                        Encryption.JOSE_ECDH_ES_ALG_ID).getRootObject());
+Assert.deepEqual(binJson, new EncryptedData(encJson)
+                            .getDecryptedData([test_private_key])
+                              .getNormalizedData());
 
 const Crypto = require('crypto');
 var aesIv = new Uint8Array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);

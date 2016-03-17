@@ -20,6 +20,7 @@
 exports.Keys = require('./lib/keys');
 exports.Hash = require('./lib/hash');
 exports.Encryption = require('./lib/encryption');
+exports.EncryptedData = require('./lib/encrypteddata');
 exports.Random = require('./lib/random');
 exports.ByteArray = require('./lib/bytearray');
 exports.Base64Url = require('./lib/base64url');
