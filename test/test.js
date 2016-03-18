@@ -31,8 +31,8 @@ const Base64Url = require('..').Base64Url;
 const Jcs = require('..').Jcs;
 const CertRead = require('./certread');
 const Hash = require('..').Hash;
-const Random = require('../lib/random');
-const Logging = require('../lib/logging');
+const Random = require('..').Random;
+const Logging = require('..').Logging;
 
 var logger = new Logging.Logger(__filename);
 logger.info('Starting');

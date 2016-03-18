@@ -21,17 +21,18 @@
 /*                         Encryption                             */
 /*================================================================*/
 
-// NOT READY
+// NOT READY (RSA still missing)
 
 const Assert = require('assert');
 const Fs = require('fs');
+const Crypto = require('crypto');
 
-const Keys = require('../lib/keys');
-const ByteArray = require('../lib/bytearray');
-const Base64Url = require('../lib/base64url');
-const Encryption = require('../lib/encryption');
-const JsonUtil = require('../lib/jsonutil');
-const EncryptedData = require('../lib/encrypteddata');
+const Keys = require('..').Keys;
+const ByteArray = require('..').ByteArray;
+const Base64Url = require('..').Base64Url;
+const Encryption = require('..').Encryption;
+const JsonUtil = require('..').JsonUtil;
+const EncryptedData = require('..').EncryptedData;
 
 // Ecdh test data
 
@@ -114,7 +115,6 @@ Assert.deepEqual(binJson, new EncryptedData(encJson)
                             .getDecryptedData([test_private_key])
                               .getNormalizedData());
 
-const Crypto = require('crypto');
 var aesIv = new Uint8Array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
 var aesKey = new Uint8Array([8,1,2,3,4,5,6,7,8,9,10,11,12,13,14,8]);
 var aesData = new Uint8Array([5,4,3,2,1]);

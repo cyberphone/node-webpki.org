@@ -17,15 +17,15 @@
  
 'use strict';
 
-exports.Keys = require('./lib/keys');
-exports.Hash = require('./lib/hash');
-exports.Encryption = require('./lib/encryption');
-exports.EncryptedData = require('./lib/encrypteddata');
-exports.Random = require('./lib/random');
-exports.ByteArray = require('./lib/bytearray');
-exports.Base64Url = require('./lib/base64url');
-exports.Jcs = require('./lib/jcs');
-exports.Hex = require('./lib/hex');
-exports.JsonUtil = require('./lib/jsonutil');
-exports.DateTime = require('./lib/datetime');
-exports.Logging = require('./lib/logging');
+exports.Keys = require('./lib/Keys');
+exports.Hash = require('./lib/Hash');
+exports.Encryption = require('./lib/Encryption');
+exports.EncryptedData = require('./lib/EncryptedData');
+exports.Random = require('./lib/Random');
+exports.ByteArray = require('./lib/ByteArray');
+exports.Base64Url = require('./lib/Base64Url');
+exports.Jcs = require('./lib/Jcs');
+exports.Hex = require('./lib/Hex');
+exports.JsonUtil = require('./lib/JsonUtil');
+exports.DateTime = require('./lib/DateTime');
+exports.Logging = require('./lib/Logging');
