@@ -6,6 +6,7 @@ const Assert = require('assert');
 const JsonUtil = require('webpki.org').JsonUtil;
 const Base64Url = require('webpki.org').Base64Url;
 const ByteArray = require('webpki.org').ByteArray;
+const Big = require('webpki.org').Big;
 
 const someObject = {
 
@@ -50,3 +51,19 @@ var theString = '\u20ac\u00e5\u00f6\k';
 Assert.equal(ByteArray.utf8ToString(utf8bin), theString);
 Assert.deepEqual(ByteArray.stringToUtf8(theString), utf8bin);
 
+Assert.throws(
+  () => {
+new JsonUtil.ObjectReader(new JsonUtil.ObjectWriter()
+  .setBigDecimal('big2',new Big(5)).getRootObject()).getBigDecimal('big2',2);
+  }
+);
+
+Assert.ok(new JsonUtil.ObjectReader(new JsonUtil.ObjectWriter()
+  .setBigDecimal('big2',new Big(5)).getRootObject()).getBigDecimal('big2').eq(new Big(5)));
+
+Assert.ok(new JsonUtil.ObjectReader(new JsonUtil.ObjectWriter()
+  .setBigDecimal('big2',new Big(5),2).getRootObject()).getBigDecimal('big2', 2).eq(new Big(5)));
+
+
+Assert.ok(new JsonUtil.ObjectReader(new JsonUtil.ObjectWriter()
+  .setBigDecimal('big2',new Big(5.25)).getRootObject()).getBigDecimal('big2', 2).eq(new Big(5.25)));
