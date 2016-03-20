@@ -29,3 +29,4 @@ exports.Hex = require('./lib/Hex');
 exports.JsonUtil = require('./lib/JsonUtil');
 exports.DateTime = require('./lib/DateTime');
 exports.Logging = require('./lib/Logging');
+exports.Big = require('./lib/contrib/big/big');
