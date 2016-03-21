@@ -37,10 +37,10 @@ var verifier = new Jcs.Verifier();
 var result = verifier.decodeSignature(signedJavaScript);
 
 // Now check if the certificate path is trusted (true)
-console.log('Validation success=' + result.isTrusted(trustedCAs));
+console.log('Validation success=' + result.verifyTrust(trustedCAs));
 
 // Now check if the client certificate is root (false)
-console.log('Validation success=' + result.isTrusted([result.getCertificatePath()[0]]));
+console.log('Validation success=' + result.verifyTrust([result.getCertificatePath()[0]]));
 
 // Now check if the certificate path holds the root (true)
-console.log('Validation success=' + result.isTrusted([result.getCertificatePath()[result.getCertificatePath().length - 1]]));
+console.log('Validation success=' + result.verifyTrust([result.getCertificatePath()[result.getCertificatePath().length - 1]]));

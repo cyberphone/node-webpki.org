@@ -167,7 +167,7 @@ var verifier = new Jcs.Verifier();
 var result = verifier.decodeSignature(signedJavaScript);
 
 // Now check if the certificate path is trusted
-console.log('Validation success=' + result.isTrusted(trustedCAs));
+console.log('Validation success=' + result.verifyTrust(trustedCAs));
 ```
 
 ###HMAC Signatures
