@@ -1,6 +1,7 @@
 'use strict';
 
 const Jcs = require('webpki.org').Jcs;
+const JsonUtil = require('webpki.org').JsonUtil;
 
 // Define a suitable secret key
 var secretKey = new Buffer('F4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
@@ -14,8 +15,8 @@ var jsonObject = {'statement':'Hello signed world!'};
 // Perform signing
 var signedJavaScript = signer.sign(jsonObject);
 
-// Print it on the console as JSON
-console.log(JSON.stringify(signedJavaScript));
+// Print it on the console as "pretty" (but legal) JSON.
+console.log(JsonUtil.prettyPrint(signedJavaScript));
 
 // Now we could verify the signed object we just created
 

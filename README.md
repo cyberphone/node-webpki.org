@@ -32,6 +32,7 @@ const Fs = require('fs');
 
 const Keys = require('webpki.org').Keys;
 const Jcs = require('webpki.org').Jcs;
+const JsonUtil = require('webpki.org').JsonUtil;
 
 function readPrivateKey(path) {
   return Keys.createPrivateKeyFromPem(Fs.readFileSync(__dirname + '/test/' + path));
@@ -49,12 +50,11 @@ var jsonObject = {'statement':'Hello signed world!'};
 // Perform signing
 var signedJavaScript = signer.sign(jsonObject);
 
-// Print it on the console as JSON
-console.log(JSON.stringify(signedJavaScript));
+// Print it on the console as "pretty" (but legal) JSON.
+console.log(JsonUtil.prettyPrint(signedJavaScript));
 ```
 
 ### Resulting JSON string
-(edited a bit for readability reasons while still being cryptographically correct)
 
 ```json
 {
@@ -106,6 +106,7 @@ const Fs = require('fs');
 
 const Keys = require('webpki.org').Keys;
 const Jcs = require('webpki.org').Jcs;
+const JsonUtil = require('webpki.org').JsonUtil;
 
 // Load private key and certificate path
 const keyData = Fs.readFileSync(__dirname + '/test/mybank-cert-and-key-p256.pem');
@@ -124,12 +125,12 @@ var jsonObject = {'statement':'Hello signed world!'};
 // Perform signing
 var signedJavaScript = signer.sign(jsonObject);
 
-// Print it on the console as JSON
-console.log(JSON.stringify(signedJavaScript));
+// Print it on the console as "pretty" (but legal) JSON.
+console.log(JsonUtil.prettyPrint(signedJavaScript));
 
 ```
 
-This sample would generate the following (albeit a bit "beautified") JSON:
+This sample would generate the following JSON:
 
 ```json
 {
@@ -176,6 +177,7 @@ console.log('Validation success=' + result.verifyTrust(trustedCAs));
 'use strict';
 
 const Jcs = require('webpki.org').Jcs;
+const JsonUtil = require('webpki.org').JsonUtil;
 
 // Define a suitable secret key
 var secretKey = new Buffer('F4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
@@ -189,8 +191,8 @@ var jsonObject = {'statement':'Hello signed world!'};
 // Perform signing
 var signedJavaScript = signer.sign(jsonObject);
 
-// Print it on the console as JSON
-console.log(JSON.stringify(signedJavaScript));
+// Print it on the console as "pretty" (but legal) JSON.
+console.log(JsonUtil.prettyPrint(signedJavaScript));
 
 // Now we could verify the signed object we just created
 
@@ -204,7 +206,7 @@ var result = verifier.decodeSignature(signedJavaScript);
 console.log('Validation success=' + result.verifyHmac(secretKey));
 ```
 
-And here is the result (after "beautifying")... 
+And here is the expected result: 
 
 ```json
 {

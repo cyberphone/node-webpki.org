@@ -4,6 +4,7 @@ const Fs = require('fs');
 
 const Keys = require('webpki.org').Keys;
 const Jcs = require('webpki.org').Jcs;
+const JsonUtil = require('webpki.org').JsonUtil;
 
 function readPrivateKey(path) {
   return Keys.createPrivateKeyFromPem(Fs.readFileSync(__dirname + '/test/' + path));
@@ -21,8 +22,9 @@ var jsonObject = {'statement':'Hello signed world!'};
 // Perform signing
 var signedJavaScript = signer.sign(jsonObject);
 
-// Print it on the console as JSON
-console.log(JSON.stringify(signedJavaScript));
+// Print it on the console as "pretty" (but legal) JSON.
+// JSON.stringify(signedJavaScript) would be a better choice for sending JSON to external parties. 
+console.log(JsonUtil.prettyPrint(signedJavaScript));
 
 // Now we could verify the signed object we just created
 
