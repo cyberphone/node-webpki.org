@@ -19,12 +19,11 @@
 
 exports.Keys = require('./lib/Keys');
 exports.Hash = require('./lib/Hash');
-exports.Encryption = require('./lib/Encryption');
-exports.EncryptedData = require('./lib/EncryptedData');
 exports.Random = require('./lib/Random');
 exports.ByteArray = require('./lib/ByteArray');
 exports.Base64Url = require('./lib/Base64Url');
 exports.Jcs = require('./lib/Jcs');
+exports.Jef = require('./lib/Jef');
 exports.Hex = require('./lib/Hex');
 exports.JsonUtil = require('./lib/JsonUtil');
 exports.DateTime = require('./lib/DateTime');

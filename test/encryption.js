@@ -30,14 +30,44 @@ const Crypto = require('crypto');
 const Keys = require('..').Keys;
 const ByteArray = require('..').ByteArray;
 const Base64Url = require('..').Base64Url;
-const Encryption = require('..').Encryption;
 const JsonUtil = require('..').JsonUtil;
-const EncryptedData = require('..').EncryptedData;
+const Jef = require('..').Jef;
 
-// Ecdh test data
+//ECDH test data
 
-const ECDH_RESULT_WITH_KDF       = 'hzHdlfQIAEehb8Hrd_mFRhKsKLEzPfshfXs9l6areCc';
-const ECDH_RESULT_WITHOUT_KDF    = 'SzFxLgluXyC07Pl5D9jMfIt-LIrZC9qByyJPYsDnuaY';
+const ECDH_RESULT_WITH_KDF    = 'hzHdlfQIAEehb8Hrd_mFRhKsKLEzPfshfXs9l6areCc';
+const ECDH_RESULT_WITHOUT_KDF = 'SzFxLgluXyC07Pl5D9jMfIt-LIrZC9qByyJPYsDnuaY';
+
+const JEF_TEST_STRING         = 'Hello encrypted world';
+const JEF_SYM_KEY             = 'ooQSGRnwUQYbvHjCMi0zPNARka2BuksLM7UK1RHiQwI';
+const JEF_ECDH_OBJECT = {
+  encryptedKey: {
+    algorithm: "ECDH-ES",
+    publicKey: {
+      type: "EC",
+      curve: "P-256",
+      x: "Ze2loSV3wrroKUN_4zhwGhCqo3Xhu1td4QjeQ5wIVR0",
+      y: "HlLtdXARY_f55A3fnzQbPcm6hgr34Mp8p-nuzQCE0Zw"
+    },
+    ephemeralKey: {
+      type: "EC",
+      curve: "P-256",
+      x: "NjmaJp-6uRGPRLtaDOIWSF0exIF5Gy6JgngW6FQ6BGI",
+      y: "f7mqQKvWu3_j9Zy9V-JE3_kv3oqYMw5zkkLuTMU6tdA"
+    }
+  },
+  algorithm: "A128CBC-HS256",
+  iv: "dTxUO-BoKpXIS6A5iS9fnw",
+  tag: "PbYak7sTADNBAKeIwL8d2Q",
+  cipherText: "8kMJ_Ju_V1NDO35wGH5eGqqrSoHHls_SyxFt4c0LTNA"
+};
+
+const JEF_SYM_OBJECT = {
+  algorithm: "A128CBC-HS256",
+  iv: "qlYEWzKR0o1pO-AZuI0ymQ",
+  tag: "CHTPgPC-CE2fPPIUSHnjRg",
+  cipherText: "1_HZs_Z0mvaBpRzDH5pkJFTt_ibz2ImeU6MmkNRoZJ8"
+};
 
 const ECHD_TEST_PRIVATE_KEY = 
 '-----BEGIN PRIVATE KEY-----\
@@ -58,18 +88,18 @@ const test_public_key =
    Keys.createPublicKeyFromPem(ECHD_TEST_PUBLIC_KEY);
 
 // ECDH Static-Static
-const ec1 = new Encryption.Ecdh(test_private_key);
+const ec1 = new Jef.Ecdh(test_private_key);
 Assert.equal(Base64Url.encode(ec1.computeZ(test_public_key)), ECDH_RESULT_WITHOUT_KDF);
 
 // ECDH Static-Static
-const ec2 = new Encryption.Ecdh(test_private_key);
+const ec2 = new Jef.Ecdh(test_private_key);
 Assert.equal(Base64Url.encode(ec2.computeWithKdf(test_public_key, 
-                                                 Encryption.JOSE_A128CBC_HS256_ALG_ID)),
+                                                 Jef.JOSE_A128CBC_HS256_ALG_ID)),
              ECDH_RESULT_WITH_KDF);
 
 // ECDH Ephemeral-Static
-const ecStatic = new Encryption.Ecdh(test_private_key);
-const ecEphemeral = new Encryption.Ecdh(test_private_key.getPublicKey());
+const ecStatic = new Jef.Ecdh(test_private_key);
+const ecEphemeral = new Jef.Ecdh(test_private_key.getPublicKey());
 Assert.deepEqual(ecStatic.computeZ(ecEphemeral.getPublicKey()),
                  ecEphemeral.computeZ(test_private_key.getPublicKey()));
                  
@@ -80,8 +110,8 @@ function readPublicKey(path) {
 }
 
 function ephemeralEphemeral(publicKey) {
-  var one = new Encryption.Ecdh(publicKey);
-  var two = new Encryption.Ecdh(publicKey);
+  var one = new Jef.Ecdh(publicKey);
+  var two = new Jef.Ecdh(publicKey);
   Assert.deepEqual(one.computeZ(two.getPublicKey()),
                    two.computeZ(one.getPublicKey()));
 }
@@ -90,30 +120,50 @@ ephemeralEphemeral(readPublicKey('private-ec-p521-key.pem'));
 ephemeralEphemeral(readPublicKey('private-p256-pkcs1.pem'));
 ephemeralEphemeral(readPublicKey('mybank-cert-and-key-p256.pem'));
 
-Assert.equal(Base64Url.encode(Encryption.receiverKeyAgreement(Encryption.JOSE_ECDH_ES_ALG_ID,
-                                         Encryption.JOSE_A128CBC_HS256_ALG_ID,
-                                         test_public_key,
-                                         test_private_key)),
+Assert.equal(Base64Url.encode(Jef.receiverKeyAgreement(Jef.JOSE_ECDH_ES_ALG_ID,
+                                                       Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                                       test_public_key,
+                                                       test_private_key)),
              ECDH_RESULT_WITH_KDF);
 
-var ecdhRes = Encryption.senderKeyAgreement(Encryption.JOSE_ECDH_ES_ALG_ID,
-                                            Encryption.JOSE_A128CBC_HS256_ALG_ID,
-                                            test_private_key.getPublicKey());
+var ecdhRes = Jef.senderKeyAgreement(Jef.JOSE_ECDH_ES_ALG_ID,
+                                     Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                     test_private_key.getPublicKey());
 Assert.deepEqual(ecdhRes.sharedSecret,
-                 Encryption.receiverKeyAgreement(Encryption.JOSE_ECDH_ES_ALG_ID,
-                                                 Encryption.JOSE_A128CBC_HS256_ALG_ID,
-                                                 ecdhRes.publicKey,
-                                                 test_private_key));
+                 Jef.receiverKeyAgreement(Jef.JOSE_ECDH_ES_ALG_ID,
+                                          Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                          ecdhRes.publicKey,
+                                          test_private_key));
 
-var unEncJson = new JsonUtil.ObjectReader({hi:'\u20ac\u00e5\u00f6k'});
-var binJson = unEncJson.getNormalizedData();
-var encJson = new JsonUtil.ObjectReader(EncryptedData.encode(unEncJson,
-                                        Encryption.JOSE_A128CBC_HS256_ALG_ID,
-                                        test_private_key.getPublicKey(),
-                                        Encryption.JOSE_ECDH_ES_ALG_ID).getRootObject());
-Assert.deepEqual(binJson, new EncryptedData(encJson)
-                            .getDecryptedData([test_private_key])
-                              .getNormalizedData());
+var encJson = new JsonUtil.ObjectWriter()
+    .setEncryptionObject(ByteArray.stringToUtf8(JEF_TEST_STRING),
+                         Jef.JOSE_A128CBC_HS256_ALG_ID,
+                         test_private_key.getPublicKey(),
+                         Jef.JOSE_ECDH_ES_ALG_ID);
+console.log(encJson.toString());
+
+Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JSON.parse(encJson))
+    .getEncryptedObject().getDecryptedData([test_private_key])),
+             JEF_TEST_STRING);
+
+Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JEF_ECDH_OBJECT)
+    .getEncryptedObject().getDecryptedData([test_private_key])),
+            JEF_TEST_STRING);
+
+var symRefKey = Base64Url.decode(JEF_SYM_KEY);
+encJson = new JsonUtil.ObjectWriter()
+    .setEncryptionObject(ByteArray.stringToUtf8(JEF_TEST_STRING),
+                         Jef.JOSE_A128CBC_HS256_ALG_ID,
+                         null,
+                         symRefKey);
+console.log(encJson.toString());
+Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JSON.parse(encJson))
+    .getEncryptedObject().getDecryptedData(symRefKey)),
+             JEF_TEST_STRING);
+
+Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JEF_SYM_OBJECT)
+    .getEncryptedObject().getDecryptedData(symRefKey)),
+             JEF_TEST_STRING);
 
 var aesIv = new Uint8Array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
 var aesKey = new Uint8Array([8,1,2,3,4,5,6,7,8,9,10,11,12,13,14,8]);
@@ -160,28 +210,26 @@ const e = hex2Bin('c80edfa32ddf39d5ef00c0b468834279' +
 
 const t = hex2Bin('652c3fa36b0a7c5b3219fab3a30bc1c4');
 
-var pout = Encryption.contentDecryption(Encryption.JOSE_A128CBC_HS256_ALG_ID,
-                                        k,
-                                        e,
-                                        iv,
-                                        a,
-                                        t);
+var pout = Jef.contentDecryption(Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                 k,
+                                 e,
+                                 iv,
+                                 a,
+                                 t);
 Assert.deepEqual(pout, p);
 
 for (var q = 0; q < 100; q++) {
-  var k1 = Encryption.generateDataEncryptionKey(Encryption.JOSE_A128CBC_HS256_ALG_ID);
-  var enc = Encryption.contentEncryption(Encryption.JOSE_A128CBC_HS256_ALG_ID,
-                                         k1,
-                                         p,
-                                         a);
-  var dec = Encryption.contentDecryption(Encryption.JOSE_A128CBC_HS256_ALG_ID,
-                                         k1,
-                                         enc.cipherText,
-                                         enc.iv,
-                                         a,
-                                         enc.tag);
+  var k1 = Jef.generateDataEncryptionKey(Jef.JOSE_A128CBC_HS256_ALG_ID);
+  var enc = Jef.contentEncryption(Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                  k1,
+                                  p,
+                                  a);
+  var dec = Jef.contentDecryption(Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                  k1,
+                                  enc.cipherText,
+                                  enc.iv,
+                                  a,
+                                  enc.tag);
    Assert.deepEqual(p,dec);
  }
-
-
 
