@@ -33,7 +33,7 @@ const Base64Url = require('..').Base64Url;
 const JsonUtil = require('..').JsonUtil;
 const Jef = require('..').Jef;
 
-//ECDH test data
+// JEF test data
 
 const ECDH_RESULT_WITH_KDF    = 'hzHdlfQIAEehb8Hrd_mFRhKsKLEzPfshfXs9l6areCc';
 const ECDH_RESULT_WITHOUT_KDF = 'SzFxLgluXyC07Pl5D9jMfIt-LIrZC9qByyJPYsDnuaY';
@@ -124,10 +124,20 @@ uADEbzdHMqUOo3IN9Tcs8ihi4ELywbAaFTXYTgDQvsigtaLojd5dqyJfWx3eeCNG4cOIFYPkMd1D\
 JJ+xMkjm/RNvgq6inQoO9/3A12WvrQ==\
 -----END PRIVATE KEY-----';
 
-const test_private_key =
-   Keys.createPrivateKeyFromPem(ECHD_TEST_PRIVATE_KEY);
-const test_public_key =
-   Keys.createPublicKeyFromPem(ECHD_TEST_PUBLIC_KEY);
+const test_private_key =  Keys.createPrivateKeyFromPem(ECHD_TEST_PRIVATE_KEY);
+const test_public_key = Keys.createPublicKeyFromPem(ECHD_TEST_PUBLIC_KEY);
+const test_private_rsa_key = Keys.createPrivateKeyFromPem(RSA_TEST_PRIVATE_KEY);
+
+/*
+// RSA key test
+const Jcs = require('..').Jcs;
+var signer = new Jcs.Signer(test_private_rsa_key);
+var jsonObject = {'statement':'Hello signed world!'};
+var signedJavaScript = signer.sign(jsonObject);
+var verifier = new Jcs.Verifier();
+var result = verifier.decodeSignature(signedJavaScript);
+console.log('Validation success=' + result.verifyPublicKey(test_private_rsa_key.getPublicKey()));
+*/
 
 // ECDH Static-Static
 const ec1 = new Jef.Ecdh(test_private_key);
