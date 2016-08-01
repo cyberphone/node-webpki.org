@@ -41,6 +41,7 @@ const ECDH_RESULT_WITHOUT_KDF = 'SzFxLgluXyC07Pl5D9jMfIt-LIrZC9qByyJPYsDnuaY';
 const JEF_TEST_STRING         = 'Hello encrypted world';
 const JEF_SYM_KEY             = 'ooQSGRnwUQYbvHjCMi0zPNARka2BuksLM7UK1RHiQwI';
 const JEF_ECDH_OBJECT = {
+  algorithm: "A128CBC-HS256",
   encryptedKey: {
     algorithm: "ECDH-ES",
     publicKey: {
@@ -52,21 +53,36 @@ const JEF_ECDH_OBJECT = {
     ephemeralKey: {
       type: "EC",
       curve: "P-256",
-      x: "NjmaJp-6uRGPRLtaDOIWSF0exIF5Gy6JgngW6FQ6BGI",
-      y: "f7mqQKvWu3_j9Zy9V-JE3_kv3oqYMw5zkkLuTMU6tdA"
+      x: "kzVP7x8OqHYSijE8D7VRSoMU91Z76eq9wt2J4gx7IDQ",
+      y: "8Kr5IjgSpMWWJKuwKh14q_xQdSLXliV4HJ76RRzMTmQ"
     }
   },
+  iv: "PyY5Yqm3xvqMtgHq7tTTQQ",
+  tag: "Ym_5zSAMma1FpAAlp-wrMQ",
+  cipherText: "WjHQVTRtutzLFjAZygmatBPSNQE2dhH-eqLZ6HO1yoQ"
+};
+
+const JEF_RSA_OBJECT = {
   algorithm: "A128CBC-HS256",
-  iv: "dTxUO-BoKpXIS6A5iS9fnw",
-  tag: "PbYak7sTADNBAKeIwL8d2Q",
-  cipherText: "8kMJ_Ju_V1NDO35wGH5eGqqrSoHHls_SyxFt4c0LTNA"
+  encryptedKey: {
+    algorithm: "RSA-OAEP-256",
+    publicKey: {
+      type: "RSA",
+      n: "y__yOXXaisKqCW2UCcOxpZRCCIdz04074KrnQXMOjSulnaB-kBUUV49Gc8jBI1k7IP0gLdtIPjv2WVFaewt3bm2P2tymRYNw6trisoVtSswWhPDNR12ZEhUNh4vIyJsyYsZRg2y11_ghmK5PeRRxSqVwdga-HOuhXhN_KyD-CL7VxHQwpeAmwWXDvPweTpLWzlVoRzOSkCbsluzCW9Sh0rBHPe4pBScaY2oXQsiWt8nm3p6rgfBALsP_8pEdt5W-dHMihTYfsuLNroJRngocnvPhv44F1ODafUwfuLPe-LpG8zIzMGHnaD4GECOatrzOqPjUCnyiHchNFap1HU8khQ",
+      e: "AQAB"
+    },
+    cipherText: "yc77BRjZm_AomIUSGSm5HzOUqp-8OUdwqD_BS5cZ9G4UWhFH1Dri6bOm_UM9PuK8_jWZBmo48Y75p3zW5sHSAJ0D0uqlfOzK87-bMRa8yjlXVTT6pAFmAxIKqZOjW0kinsZ6p9HubRU-wSOg4MTc7_8gk1vLLWOlqgbnGG33FANkAiH-Ofnc8vsQUvlh1d2o7EzJ5U2pSqgVBmY4Ee5l-tuc-qWiRPvP9bTFWMdKMznqoBwREod3tnK3IsnXqV8xnS4YZ6UvtITUF4HgZb6pPS2JIQwTvA1-xCaiGbWPWVyeSt8JJzeULsa0qNIdW82ryo9d4Q5UpmhTTQw_LOokSg"
+  },
+  iv: "WVtG8HeKA2JL_hvjPuU_dQ",
+  tag: "5zrIFLOfzi7ci1M82MYrrg",
+  cipherText: "dj0cLW-g7RI2_xesbj-r4vjuMUEU26n2prIURoVBH_U"
 };
 
 const JEF_SYM_OBJECT = {
   algorithm: "A128CBC-HS256",
-  iv: "qlYEWzKR0o1pO-AZuI0ymQ",
-  tag: "CHTPgPC-CE2fPPIUSHnjRg",
-  cipherText: "1_HZs_Z0mvaBpRzDH5pkJFTt_ibz2ImeU6MmkNRoZJ8"
+  iv: "zwM_nz_WqSITnIvFtsKn2A",
+  tag: "okU8WueHpp7OD8UptWPAtA",
+  cipherText: "zZI4Z6eNlCENpvq4ScOpeFKODTEl0O1511EeRpfV3YY"
 };
 
 const ECHD_TEST_PRIVATE_KEY = 
@@ -81,6 +97,32 @@ const ECHD_TEST_PUBLIC_KEY =
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmPUKT/bAWGHIhg0TpjjqVsP1rXWQu/vwVOHHtNkd\
 YoDwFACwiYZ4BLjp/JbDkyFh8ZNPQiMGkXDZJLfgO/giuw==\
 -----END PUBLIC KEY-----';
+
+const RSA_TEST_PRIVATE_KEY = 
+'-----BEGIN PRIVATE KEY-----\
+MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDL//I5ddqKwqoJbZQJw7GllEII\
+h3PTjTvgqudBcw6NK6WdoH6QFRRXj0ZzyMEjWTsg/SAt20g+O/ZZUVp7C3dubY/a3KZFg3Dq2uKy\
+hW1KzBaE8M1HXZkSFQ2Hi8jImzJixlGDbLXX+CGYrk95FHFKpXB2Br4c66FeE38rIP4IvtXEdDCl\
+4CbBZcO8/B5OktbOVWhHM5KQJuyW7MJb1KHSsEc97ikFJxpjahdCyJa3yebenquB8EAuw//ykR23\
+lb50cyKFNh+y4s2uglGeChye8+G/jgXU4Np9TB+4s974ukbzMjMwYedoPgYQI5q2vM6o+NQKfKId\
+yE0VqnUdTySFAgMBAAECggEBAJYnB7U/h+JGsj1KSIJ/ZgyH+aqpeJmoBQCzCpBkDbve+oHxFfcb\
+bOOd869Zfr9z+E+pwLvAAYa9P/AyLzUOFZRUVGQ1sLTNsJlNDztzdiRt381uKMp0nCxxDopMWzc8\
+9HM7odfodlhGrQPimWB3qYPWDdbx05EZ5qaGFz45hIIOFAQj2VgWKokjmE5ZsjIdziax5YZGqjEG\
+SA9WnFNVj3+a7ZffrNwy2I2lfbIJPuHZZlEoVqGuK7itbS+IWVe+7YB8xtA+I5p43O2h5x9tGghq\
+Bs9EpCAx+WPlM6LRvryr1Vv/S2l0qxHH7qrNmLWl3osQdV6fxCN8p7bdc/rzwukCgYEA8VLnM8VF\
+1pW1M31jQfec0h4NUO3WuLTR8xJJA1Qn572zYC1jd5myLOYIdZ1KpSDeTtydEiR63OMeht4Ph5Gg\
+Bd8d8Mfq5ANpyhmMO8eqegzx51AuKFRrRyLVtjgwdt3Y+xzsagR1ovHg7C0nvMoBGBC6R4HqRmX7\
+Yeq/Me4Kb2MCgYEA2Gf00+LjLNyHjcPZGA4mEQ/Zo+5cj9t6X2+m8Vyu40Id1OOdzhbE1jifls0p\
+iTdD2/dxGcYLhtDxJtvRr58YsArJSKOdDAZxETfh4f3K/QEoWiVFKd2Ig2P67k4D1sEPoFjM8ri3\
+vFstAawQv06nwgKtNWhfkOishKjpfEPJZPcCgYEAoykgNLqOa3Uw3C1MrM9TciTrb+o+oQdwY93b\
+C6sch+yUmNRXSgfalcy5r3u3eknsxHkYoamUgD/25czBxzFIdm/R+HfScnN0VTZMwCZRNtAFxhVJ\
+/+6D0cbVo6v96IA6Mh3uIgf92TucjVJCabxSXQkCSVKnKQ3Olvd2abW9zG0CgYBS/ltov4T8eX8L\
+IWcq0JJMzNVdB1c8XKHr4/gUbMUtpvel471rglPvDDw4K2qYkzdVLuqTRd65z3wMuRUL02o2aYyU\
+bRsXt4i5X8MjVp/4s+7z04NY8Psf2MItjoHuZJBHoIbJN4pPlHAISiMKG3I+96PR7bto6bLwFY+l\
+9qFQNQKBgQCTJYJQUfyYLh69dE/R+UBNh2sA8hbC4s733jlDkVdFPjWMVbMBjw076nM9Yh+jy45Z\
+uADEbzdHMqUOo3IN9Tcs8ihi4ELywbAaFTXYTgDQvsigtaLojd5dqyJfWx3eeCNG4cOIFYPkMd1D\
+JJ+xMkjm/RNvgq6inQoO9/3A12WvrQ==\
+-----END PRIVATE KEY-----';
 
 const test_private_key =
    Keys.createPrivateKeyFromPem(ECHD_TEST_PRIVATE_KEY);
@@ -141,7 +183,6 @@ var encJson = new JsonUtil.ObjectWriter()
                          test_private_key.getPublicKey(),
                          Jef.JOSE_ECDH_ES_ALG_ID);
 console.log(encJson.toString());
-
 Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JSON.parse(encJson))
     .getEncryptedObject().getDecryptedData([test_private_key])),
              JEF_TEST_STRING);
