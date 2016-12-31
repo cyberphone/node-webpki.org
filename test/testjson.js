@@ -75,6 +75,48 @@ Assert.throws(
   }
 );
 
+Assert.throws(
+  () => {
+    new JsonUtil.ObjectReader({my:6.5}).getInt('my');
+  }
+);
+
+Assert.doesNotThrow(
+  () => {
+    new JsonUtil.ObjectReader({my:9007199254740991}).getInt('my');
+  }
+);
+
+Assert.throws(
+  () => {
+    new JsonUtil.ObjectReader({my:9007199254740992}).getInt('my');
+  }
+);
+
+Assert.doesNotThrow(
+  () => {
+    new JsonUtil.ObjectWriter().setInt('my',9007199254740991);
+  }
+);
+
+Assert.throws(
+  () => {
+    new JsonUtil.ObjectWriter().setInt('my', 9007199254740992);
+  }
+);
+
+Assert.doesNotThrow(
+  () => {
+    new JsonUtil.ArrayReader([-9007199254740991]).getInt();
+  }
+);
+
+Assert.throws(
+  () => {
+    new JsonUtil.ArrayReader([9007199254740992]).getInt();
+  }
+);
+
 Assert.deepEqual(Base64Url.decode(someObject.ablob), reader.getBinary('ablob'));
 
 Assert.throws(
