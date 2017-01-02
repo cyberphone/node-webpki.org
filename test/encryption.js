@@ -216,6 +216,16 @@ Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JEF_SYM_OBJECT)
     .getEncryptionObject().getDecryptedData(symRefKey)),
              JEF_TEST_STRING);
 
+encJson = new JsonUtil.ObjectWriter()
+    .setEncryptionObject(ByteArray.stringToUtf8(JEF_TEST_STRING),
+                         Jef.JOSE_A128CBC_HS256_ALG_ID,
+                         "myKey",
+                         symRefKey);
+console.log(encJson.toString());
+Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JSON.parse(encJson))
+    .getEncryptionObject().getDecryptedData(symRefKey)),
+             JEF_TEST_STRING);
+
 var aesIv = new Uint8Array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
 var aesKey = new Uint8Array([8,1,2,3,4,5,6,7,8,9,10,11,12,13,14,8]);
 var aesData = new Uint8Array([5,4,3,2,1]);
