@@ -194,11 +194,11 @@ var encJson = new JsonUtil.ObjectWriter()
                          Jef.JOSE_ECDH_ES_ALG_ID);
 console.log(encJson.toString());
 Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JSON.parse(encJson))
-    .getEncryptedObject().getDecryptedData([test_private_key])),
+    .getEncryptionObject().getDecryptedData([test_private_key])),
              JEF_TEST_STRING);
 
 Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JEF_ECDH_OBJECT)
-    .getEncryptedObject().getDecryptedData([test_private_key])),
+    .getEncryptionObject().getDecryptedData([test_private_key])),
             JEF_TEST_STRING);
 
 var symRefKey = Base64Url.decode(JEF_SYM_KEY);
@@ -209,11 +209,11 @@ encJson = new JsonUtil.ObjectWriter()
                          symRefKey);
 console.log(encJson.toString());
 Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JSON.parse(encJson))
-    .getEncryptedObject().getDecryptedData(symRefKey)),
+    .getEncryptionObject().getDecryptedData(symRefKey)),
              JEF_TEST_STRING);
 
 Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JEF_SYM_OBJECT)
-    .getEncryptedObject().getDecryptedData(symRefKey)),
+    .getEncryptionObject().getDecryptedData(symRefKey)),
              JEF_TEST_STRING);
 
 var aesIv = new Uint8Array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
