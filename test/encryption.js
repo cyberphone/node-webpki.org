@@ -38,7 +38,7 @@ const Jef = require('..').Jef;
 const ECDH_RESULT_WITH_KDF    = 'hzHdlfQIAEehb8Hrd_mFRhKsKLEzPfshfXs9l6areCc';
 const ECDH_RESULT_WITHOUT_KDF = 'SzFxLgluXyC07Pl5D9jMfIt-LIrZC9qByyJPYsDnuaY';
 
-const JEF_TEST_STRING         = 'Hello encrypted world';
+const JEF_TEST_STRING         = ByteArray.stringToUtf8('Hello encrypted world');
 const JEF_SYM_KEY             = 'ooQSGRnwUQYbvHjCMi0zPNARka2BuksLM7UK1RHiQwI';
 const JEF_ECDH_OBJECT = {
   algorithm: "A128CBC-HS256",
@@ -191,40 +191,40 @@ var encJson = new JsonUtil.ObjectWriter()
     .setEncryptionObject(ByteArray.stringToUtf8(JEF_TEST_STRING),
                          Jef.JOSE_A128CBC_HS256_ALG_ID,
                          test_private_key.getPublicKey(),
-                         Jef.JOSE_ECDH_ES_ALG_ID);
-console.log(encJson.toString());
-Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JSON.parse(encJson))
-    .getEncryptionObject().getDecryptedData([test_private_key])),
-             JEF_TEST_STRING);
+                         Jef.JOSE_ECDH_ES_ALG_ID).toString();
+console.log(encJson);
+Assert.deepEqual(JsonUtil.ObjectReader.parse(encJson)
+                     .getEncryptionObject().getDecryptedData([test_private_key]),
+                 JEF_TEST_STRING);
 
-Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JEF_ECDH_OBJECT)
-    .getEncryptionObject().getDecryptedData([test_private_key])),
-            JEF_TEST_STRING);
+Assert.deepEqual(new JsonUtil.ObjectReader(JEF_ECDH_OBJECT)
+                     .getEncryptionObject().getDecryptedData([test_private_key]),
+                 JEF_TEST_STRING);
 
 var symRefKey = Base64Url.decode(JEF_SYM_KEY);
 encJson = new JsonUtil.ObjectWriter()
-    .setEncryptionObject(ByteArray.stringToUtf8(JEF_TEST_STRING),
+    .setEncryptionObject(JEF_TEST_STRING,
                          Jef.JOSE_A128CBC_HS256_ALG_ID,
                          null,
-                         symRefKey);
-console.log(encJson.toString());
-Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JSON.parse(encJson))
-    .getEncryptionObject().getDecryptedData(symRefKey)),
-             JEF_TEST_STRING);
+                         symRefKey).toString();
+console.log(encJson);
+Assert.deepEqual(JsonUtil.ObjectReader.parse(encJson)
+                     .getEncryptionObject().getDecryptedData(symRefKey),
+                 JEF_TEST_STRING);
 
-Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JEF_SYM_OBJECT)
-    .getEncryptionObject().getDecryptedData(symRefKey)),
-             JEF_TEST_STRING);
+Assert.deepEqual(new JsonUtil.ObjectReader(JEF_SYM_OBJECT)
+                     .getEncryptionObject().getDecryptedData(symRefKey),
+                 JEF_TEST_STRING);
 
 encJson = new JsonUtil.ObjectWriter()
     .setEncryptionObject(ByteArray.stringToUtf8(JEF_TEST_STRING),
                          Jef.JOSE_A128CBC_HS256_ALG_ID,
                          "myKey",
-                         symRefKey);
-console.log(encJson.toString());
-Assert.equal(ByteArray.utf8ToString(new JsonUtil.ObjectReader(JSON.parse(encJson))
-    .getEncryptionObject().getDecryptedData(symRefKey)),
-             JEF_TEST_STRING);
+                         symRefKey).toString();
+console.log(encJson);
+Assert.deepEqual(JsonUtil.ObjectReader.parse(encJson)
+                     .getEncryptionObject().getDecryptedData(symRefKey),
+                 JEF_TEST_STRING);
 
 var aesIv = new Uint8Array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
 var aesKey = new Uint8Array([8,1,2,3,4,5,6,7,8,9,10,11,12,13,14,8]);

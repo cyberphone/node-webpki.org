@@ -41,7 +41,7 @@ for (var q = 1; q < pretty.length; q++) {
   if (pretty.charAt(q - 1) == '\n' && pretty.charAt(q) == '\n') {
     var formatted = pretty.substring(begin, q);
     begin = q + 1;
-    var json = new JsonUtil.ObjectReader(JSON.parse(formatted));
+    var json = JsonUtil.ObjectReader.parse(formatted);
     Assert.equal(formatted, json.toString());
   }
 }
