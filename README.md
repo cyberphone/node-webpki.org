@@ -2,8 +2,8 @@
 
 Very early documentation, stay tuned :-)
 
-JCS rationale: https://cyberphone.github.io/openkeystore/resources/docs/jsonsignatures.html<br>
-JCS specification: https://cyberphone.github.io/openkeystore/resources/docs/jcs.html
+JCS rationale: https://cyberphone.github.io/doc/security/jsonsignatures.html<br>
+JCS specification: https://cyberphone.github.io/doc/security/jcs.html
 
 ### Installation
 
@@ -39,7 +39,7 @@ function readPrivateKey(path) {
 }
 
 // Load a private key
-const privateKey = readPrivateKey('private-p256-pkcs1.pem');
+const privateKey = readPrivateKey('private-p256-pkcs8.pem');
 
 // Initiate the signer
 var signer = new Jcs.Signer(privateKey);
