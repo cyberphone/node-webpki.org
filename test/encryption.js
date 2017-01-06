@@ -169,7 +169,7 @@ function ephemeralEphemeral(publicKey) {
 }
                    
 ephemeralEphemeral(readPublicKey('private-ec-p521-key.pem'));
-ephemeralEphemeral(readPublicKey('private-p256-pkcs1.pem'));
+ephemeralEphemeral(readPublicKey('private-p256-pkcs8.pem'));
 ephemeralEphemeral(readPublicKey('mybank-cert-and-key-p256.pem'));
 
 Assert.equal(Base64Url.encode(Jef.receiverKeyAgreement(Jef.JOSE_ECDH_ES_ALG_ID,

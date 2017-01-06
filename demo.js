@@ -11,7 +11,7 @@ function readPrivateKey(path) {
 }
 
 // Load a private key
-const privateKey = readPrivateKey('private-p256-pkcs1.pem');
+const privateKey = readPrivateKey('private-p256-pkcs8.pem');
 
 // Initiate the signer
 var signer = new Jcs.Signer(privateKey);
