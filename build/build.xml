@@ -1,0 +1,32 @@
+<project name="Build Docs" default="build" basedir=".">
+	
+	<property name="dest" location="../baj.hmtl"/>
+
+  <target name="build">
+		<delete file="${dest}"/>
+	  <concat destfile="${dest}">
+  		<resources>
+		    <string><![CDATA[
+  	   <security-constraint>
+  	      <web-resource-collection>
+  	        <web-resource-name>The app</web-resource-name>
+  	          <url-pattern>/*</url-pattern>
+  	       </web-resource-collection>
+  	       <user-data-constraint>
+  	         <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+  	      </user-data-constraint>
+  	    </security-constraint>
+  	    ]]></string>
+        <string>
+Hej!
+        </string>
+        <file file="../lib/Random.js"/>
+        <string>
+Dej!
+        </string>
+  	  </resources>
+		</concat>
+  </target>
+
+</project>
+
