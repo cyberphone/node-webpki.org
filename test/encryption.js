@@ -187,11 +187,11 @@ Assert.deepEqual(ecdhRes.sharedSecret,
                                           ecdhRes.publicKey,
                                           test_private_key));
 
-var encJson = new JsonUtil.ObjectWriter()
-    .setEncryptionObject(ByteArray.stringToUtf8(JEF_TEST_STRING),
-                         Jef.JOSE_A128CBC_HS256_ALG_ID,
-                         test_private_key.getPublicKey(),
-                         Jef.JOSE_ECDH_ES_ALG_ID).toString();
+var encJson =
+   JsonUtil.ObjectWriter.setEncryptionObject(JEF_TEST_STRING,
+                                             Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                             test_private_key.getPublicKey(),
+                                             Jef.JOSE_ECDH_ES_ALG_ID).toString();
 console.log(encJson);
 Assert.deepEqual(JsonUtil.ObjectReader.parse(encJson)
                      .getEncryptionObject().getDecryptedData([test_private_key]),
@@ -202,11 +202,11 @@ Assert.deepEqual(new JsonUtil.ObjectReader(JEF_ECDH_OBJECT)
                  JEF_TEST_STRING);
 
 var symRefKey = Base64Url.decode(JEF_SYM_KEY);
-encJson = new JsonUtil.ObjectWriter()
-    .setEncryptionObject(JEF_TEST_STRING,
-                         Jef.JOSE_A128CBC_HS256_ALG_ID,
-                         null,
-                         symRefKey).toString();
+encJson =
+    JsonUtil.ObjectWriter.setEncryptionObject(JEF_TEST_STRING,
+                                              Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                              null,
+                                              symRefKey).toString();
 console.log(encJson);
 Assert.deepEqual(JsonUtil.ObjectReader.parse(encJson)
                      .getEncryptionObject().getDecryptedData(symRefKey),
@@ -216,11 +216,11 @@ Assert.deepEqual(new JsonUtil.ObjectReader(JEF_SYM_OBJECT)
                      .getEncryptionObject().getDecryptedData(symRefKey),
                  JEF_TEST_STRING);
 
-encJson = new JsonUtil.ObjectWriter()
-    .setEncryptionObject(ByteArray.stringToUtf8(JEF_TEST_STRING),
-                         Jef.JOSE_A128CBC_HS256_ALG_ID,
-                         "myKey",
-                         symRefKey).toString();
+encJson =
+    JsonUtil.ObjectWriter.setEncryptionObject(JEF_TEST_STRING,
+                                              Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                              "myKey",
+                                              symRefKey).toString();
 console.log(encJson);
 Assert.deepEqual(JsonUtil.ObjectReader.parse(encJson)
                      .getEncryptionObject().getDecryptedData(symRefKey),
