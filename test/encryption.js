@@ -188,10 +188,10 @@ Assert.deepEqual(ecdhRes.sharedSecret,
                                           test_private_key));
 
 var encJson =
-   JsonUtil.ObjectWriter.setEncryptionObject(JEF_TEST_STRING,
-                                             Jef.JOSE_A128CBC_HS256_ALG_ID,
-                                             test_private_key.getPublicKey(),
-                                             Jef.JOSE_ECDH_ES_ALG_ID).toString();
+   JsonUtil.ObjectWriter.setAsymEncryptionObject(JEF_TEST_STRING,
+                                                 Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                                 test_private_key.getPublicKey(),
+                                                 Jef.JOSE_ECDH_ES_ALG_ID).toString();
 console.log(encJson);
 Assert.deepEqual(JsonUtil.ObjectReader.parse(encJson)
                      .getEncryptionObject().getDecryptedData([test_private_key]),
@@ -203,10 +203,10 @@ Assert.deepEqual(new JsonUtil.ObjectReader(JEF_ECDH_OBJECT)
 
 var symRefKey = Base64Url.decode(JEF_SYM_KEY);
 encJson =
-    JsonUtil.ObjectWriter.setEncryptionObject(JEF_TEST_STRING,
-                                              Jef.JOSE_A128CBC_HS256_ALG_ID,
-                                              null,
-                                              symRefKey).toString();
+    JsonUtil.ObjectWriter.setSymEncryptionObject(JEF_TEST_STRING,
+                                                 Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                                 null,
+                                                 symRefKey).toString();
 console.log(encJson);
 Assert.deepEqual(JsonUtil.ObjectReader.parse(encJson)
                      .getEncryptionObject().getDecryptedData(symRefKey),
@@ -217,10 +217,10 @@ Assert.deepEqual(new JsonUtil.ObjectReader(JEF_SYM_OBJECT)
                  JEF_TEST_STRING);
 
 encJson =
-    JsonUtil.ObjectWriter.setEncryptionObject(JEF_TEST_STRING,
-                                              Jef.JOSE_A128CBC_HS256_ALG_ID,
-                                              "myKey",
-                                              symRefKey).toString();
+    JsonUtil.ObjectWriter.setSymEncryptionObject(JEF_TEST_STRING,
+                                                 Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                                 "myKey",
+                                                 symRefKey).toString();
 console.log(encJson);
 Assert.deepEqual(JsonUtil.ObjectReader.parse(encJson)
                      .getEncryptionObject().getDecryptedData(symRefKey),
