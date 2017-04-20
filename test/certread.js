@@ -30,7 +30,7 @@ function certReader (certInBase64URL) {
   var certData = new Keys.Certificate(Base64Url.decode(certInBase64URL));
   console.log('Certificate with SN=' + certData.getSerialNumber().toString() + '\n' +
               certData.getIssuer() + '\n' + certData.getSubject() + '\n' +
-              certData.getPublicKey().getJcs());
+              certData.getPublicKey().getJwk());
 }
 
 var cert = "MIIDYzCCAkugAwIBAgIGAUOeUH5GMA0GCS\
