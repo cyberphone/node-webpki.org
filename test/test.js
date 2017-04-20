@@ -129,21 +129,21 @@ function encodePublicKey(key, spkiBase64URL) {
 
 base64run();
 
-encodePublicKey(Keys.encodePublicKey({type: 'EC',
-curve: 'P-256',
+encodePublicKey(Keys.encodePublicKey({kty: 'EC',
+crv: 'P-256',
 x: 'GRgbhKB9Mw1lDKJFMbD_HsBvHR9235X7zF2SxHkDiOU',
 y: 'isxpqxSx6AAEmZfgL5HevS67ejfm_4HcsB883TUaccs'}),
 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEGRgbhKB9Mw1lDKJFMbD_HsBvHR9235X7zF2SxHkDiOWKzGmrFLHoAASZl-Avkd69Lrt6N-b_gdywHzzdNRpxyw');
 
-encodePublicKey(Keys.encodePublicKey({type: 'EC',
-curve: 'P-521',
+encodePublicKey(Keys.encodePublicKey({kty: 'EC',
+crv: 'P-521',
 x: 'AQggHPZ-De2Tq_7U7v8ADpjyouKk6eV97Lujt9NdIcZgWI_cyOLv9HZulGWtC7I3X73ABE-rx95hAKbxiqQ1q0bA',
 y: 'AP5yYckNtHGuzZ9Gb8oqueBXwgG5Riu5LnbhQUz5Mb_Xjo4mnhqe1f396ldZMUvyJdi2O03OZdhkpVv_ks2CsYHp'}),
 'MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBCCAc9n4N7ZOr_tTu\
 _wAOmPKi4qTp5X3su6O3010hxmBYj9zI4u_0dm6UZa0LsjdfvcAET6vH3mEApvGKpDWrRsAA_nJhyQ20ca7Nn0Zvyiq54FfCAblGK7kuduF\
 BTPkxv9eOjiaeGp7V_f3qV1kxS_Il2LY7Tc5l2GSlW_-SzYKxgek');
 
-encodePublicKey(Keys.encodePublicKey({type: 'RSA',
+encodePublicKey(Keys.encodePublicKey({kty: 'RSA',
 n: '6mct2A1crFheV3fiMvXzwFJgR6fWnBRyg6X0P_uTQOlll1orTqd6a0QTTjnm1XlM5XF8g5SyqhIO4kLUmvJvwEHaXHHkbn\
 8N4gHzhbPA7FHVdCt37W5jduUVWHlBVoXIbGaLrCUj4BCDmXImhOHxbhRvyiY2XWcDFAGt_60IzLAnPUof2Rv-aPNYJY6qa0yvnJmQp4yNPsIpHYpj9Sa3\
 rctEC2OELZy-HTlDBVyzEYwnmDXtvhjoPEaUZUyHaJTC_LZMOTsgJqDT8mOvHyZpLH_f7u55mXDBoXF0iG9sikiRVndkJ18wZmNRow2UmK3QB6G2kUYxt3\

@@ -62,12 +62,12 @@ console.log(JsonUtil.prettyPrint(signedJavaScript));
   "signature": {
     "algorithm": "ES256",
     "publicKey": {
-      "type": "EC",
-      "curve": "P-256",
+      "kty": "EC",
+      "crv": "P-256",
       "x": "67f720OvQfRJaolZjIz_l-5qkCCJ0wK9MljNCOga-00",
       "y": "rDase7PLLOrppIfJpSHdj8vIjVz1BAi8tIFR0fmeyLY"
     },
-    "value": "ie7k1zVY4eGBjCJz9z7c9wbkd5r5MW8Yu9zkJF3Jyy2sRww9kdFqJux-BiK02FCnBTn43Pz4NQMdlScIP9NhVA"
+    "value": "drk3GbD_ETa1VRAnoNeqs4tHHzsNebaEKFfQrF7qS0FQ01cS_tFcDhCL2zHi1iGVZQtTZ07nN1-DYtLLxbZJjg"
   }
 }
 ```
