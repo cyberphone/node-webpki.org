@@ -1,12 +1,12 @@
 'use strict';
 
-const Fs = require('fs');
+const Fs     = require('fs');
 const Assert = require('assert');
 
-const JsonUtil = require('webpki.org').JsonUtil;
+const JsonUtil  = require('webpki.org').JsonUtil;
 const Base64Url = require('webpki.org').Base64Url;
 const ByteArray = require('webpki.org').ByteArray;
-const Big = require('webpki.org').Big;
+const Big       = require('webpki.org').Big;
 
 const someObject = {
 

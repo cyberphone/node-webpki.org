@@ -24,14 +24,14 @@
 // NOT READY (RSA still missing)
 
 const Assert = require('assert');
-const Fs = require('fs');
+const Fs     = require('fs');
 const Crypto = require('crypto');
 
-const Keys = require('..').Keys;
+const Keys      = require('..').Keys;
 const ByteArray = require('..').ByteArray;
 const Base64Url = require('..').Base64Url;
-const JsonUtil = require('..').JsonUtil;
-const Jef = require('..').Jef;
+const JsonUtil  = require('..').JsonUtil;
+const Jef       = require('..').Jef;
 
 // JEF test data
 
@@ -159,17 +159,6 @@ JJ+xMkjm/RNvgq6inQoO9/3A12WvrQ==\
 const test_private_key =  Keys.createPrivateKeyFromPem(ECHD_TEST_PRIVATE_KEY);
 const test_public_key = Keys.createPublicKeyFromPem(ECHD_TEST_PUBLIC_KEY);
 const test_private_rsa_key = Keys.createPrivateKeyFromPem(RSA_TEST_PRIVATE_KEY);
-
-/*
-// RSA key test
-const Jcs = require('..').Jcs;
-var signer = new Jcs.Signer(test_private_rsa_key);
-var jsonObject = {'statement':'Hello signed world!'};
-var signedJavaScript = signer.sign(jsonObject);
-var verifier = new Jcs.Verifier();
-var result = verifier.decodeSignature(signedJavaScript);
-console.log('Validation success=' + result.verifyPublicKey(test_private_rsa_key.getPublicKey()));
-*/
 
 // ECDH Static-Static
 const ec1 = new Jef.Ecdh(test_private_key);

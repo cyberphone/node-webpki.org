@@ -23,7 +23,7 @@
 
 // Unit testing suite for certificates
 
-const Keys = require('..').Keys;
+const Keys      = require('..').Keys;
 const Base64Url = require('..').Base64Url;
 
 function certReader (certInBase64URL) {

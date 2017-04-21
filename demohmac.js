@@ -1,6 +1,6 @@
 'use strict';
 
-const Jcs = require('webpki.org').Jcs;
+const Jcs      = require('webpki.org').Jcs;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 // Define a suitable secret key

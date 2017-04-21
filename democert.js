@@ -2,8 +2,8 @@
 
 const Fs = require('fs');
 
-const Keys = require('webpki.org').Keys;
-const Jcs = require('webpki.org').Jcs;
+const Keys     = require('webpki.org').Keys;
+const Jcs      = require('webpki.org').Jcs;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 // Load private key and certificate path
