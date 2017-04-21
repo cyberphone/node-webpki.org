@@ -1,9 +1,10 @@
-# JCS (JSON Cleartext Signature) for "node.js"
+# JCS and JEF for "node.js"
 
 Very early documentation, stay tuned :-)
 
-JCS rationale: https://cyberphone.github.io/doc/security/jsonsignatures.html<br>
-JCS specification: https://cyberphone.github.io/doc/security/jcs.html
+JCS (JSON Cleartext Signature) rationale: https://cyberphone.github.io/doc/security/jsonsignatures.html<br>
+JCS specification: https://cyberphone.github.io/doc/security/jcs.html<br>
+JEF (JSON Encryption Format) specification: https://cyberphone.github.io/doc/security/jef.html
 
 ### Installation
 
