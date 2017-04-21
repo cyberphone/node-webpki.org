@@ -31,8 +31,8 @@ Validation success=true
 
 const Fs = require('fs');
 
-const Keys = require('webpki.org').Keys;
-const Jcs = require('webpki.org').Jcs;
+const Keys     = require('webpki.org').Keys;
+const Jcs      = require('webpki.org').Jcs;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 function readPrivateKey(path) {
@@ -95,7 +95,7 @@ var result = verifier.decodeSignature(signedJavaScript);
 console.log('Validation success=' + result.verifyPublicKey(publicKey));
 ```
 
-###Using Certificates
+### Using Certificates
 
 Creating signatures with certificate paths is almost identical to
 signatures only using public keys.  You simply need to add the path.
@@ -105,8 +105,8 @@ signatures only using public keys.  You simply need to add the path.
 
 const Fs = require('fs');
 
-const Keys = require('webpki.org').Keys;
-const Jcs = require('webpki.org').Jcs;
+const Keys     = require('webpki.org').Keys;
+const Jcs      = require('webpki.org').Jcs;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 // Load private key and certificate path
@@ -152,7 +152,7 @@ This sample would generate the following JSON:
 }
 ```
 
-###Validation of Certificate Paths
+### Validation of Certificate Paths
 
 Validation requires that you provide a collection of CA certificates.
 
@@ -172,12 +172,12 @@ var result = verifier.decodeSignature(signedJavaScript);
 console.log('Validation success=' + result.verifyTrust(trustedCAs));
 ```
 
-###HMAC Signatures
+### HMAC Signatures
 
 ```javascript
 'use strict';
 
-const Jcs = require('webpki.org').Jcs;
+const Jcs      = require('webpki.org').Jcs;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 // Define a suitable secret key
