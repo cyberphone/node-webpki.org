@@ -38,51 +38,82 @@ const Jef = require('..').Jef;
 const ECDH_RESULT_WITH_KDF    = 'hzHdlfQIAEehb8Hrd_mFRhKsKLEzPfshfXs9l6areCc';
 const ECDH_RESULT_WITHOUT_KDF = 'SzFxLgluXyC07Pl5D9jMfIt-LIrZC9qByyJPYsDnuaY';
 
-const JEF_TEST_STRING         = ByteArray.stringToUtf8('Hello encrypted world');
+const JEF_TEST_STRING         = ByteArray.stringToUtf8('Hello encrypted world!');
 const JEF_SYM_KEY             = 'ooQSGRnwUQYbvHjCMi0zPNARka2BuksLM7UK1RHiQwI';
-const JEF_ECDH_OBJECT = {
+const JEF_EC_KEY_ID           = '20170101:mybank:ec';
+const JEF_RSA_KEY_ID          = '20170101:mybank:rsa';
+const JEF_ECDH_OBJECT_2 = {
   algorithm: "A128CBC-HS256",
   encryptedKey: {
     algorithm: "ECDH-ES",
     publicKey: {
-      type: "EC",
-      curve: "P-256",
+      kty: "EC",
+      crv: "P-256",
       x: "Ze2loSV3wrroKUN_4zhwGhCqo3Xhu1td4QjeQ5wIVR0",
       y: "HlLtdXARY_f55A3fnzQbPcm6hgr34Mp8p-nuzQCE0Zw"
     },
     ephemeralKey: {
-      type: "EC",
-      curve: "P-256",
-      x: "kzVP7x8OqHYSijE8D7VRSoMU91Z76eq9wt2J4gx7IDQ",
-      y: "8Kr5IjgSpMWWJKuwKh14q_xQdSLXliV4HJ76RRzMTmQ"
+      kty: "EC",
+      crv: "P-256",
+      x: "rBtn97tjHIxhjqfYXVn1fzquCFmPYwf4CldYeE1mnS8",
+      y: "JP219rw63jasC_7ixwYsD8PijYU2lnvQwvA9e17RPo8"
     }
   },
-  iv: "PyY5Yqm3xvqMtgHq7tTTQQ",
-  tag: "Ym_5zSAMma1FpAAlp-wrMQ",
-  cipherText: "WjHQVTRtutzLFjAZygmatBPSNQE2dhH-eqLZ6HO1yoQ"
+  iv: "bI7Ju1Cyj3Boe-wXoHvaEg",
+  tag: "Qt2Q7S3auu_y4mVvSZoM2Q",
+  cipherText: "ch2k75lE1NQKBeYkJgXpcmY__cQdzvSV701sAGEKGE0"
 };
 
-const JEF_RSA_OBJECT = {
+const JEF_ECDH_OBJECT_1 = {
+  algorithm: "A128CBC-HS256",
+  encryptedKey: {
+    algorithm: "ECDH-ES",
+    keyId: "20170101:mybank:ec",
+    ephemeralKey: {
+      kty: "EC",
+      crv: "P-256",
+      x: "ZuESJhuxPPTuloRigAh0aWZrgfFpBgjKQO3qzPFKiKs",
+      y: "_SwkU496ZCpmwiN2WvVVGFMfUstH1mGSZIbcvTtzdtc"
+    }
+  },
+  iv: "FwpBD07mlfkaoIcrEZouig",
+  tag: "MQYMFMpDtjmlxPop42hoQg",
+  cipherText: "ito6qBV4xYTIv7C4-vNs3d95NNRpCZLC6dhkInrWn8M"
+};
+
+const JEF_RSA_OBJECT_2 = {
   algorithm: "A128CBC-HS256",
   encryptedKey: {
     algorithm: "RSA-OAEP-256",
     publicKey: {
-      type: "RSA",
+      kty: "RSA",
       n: "y__yOXXaisKqCW2UCcOxpZRCCIdz04074KrnQXMOjSulnaB-kBUUV49Gc8jBI1k7IP0gLdtIPjv2WVFaewt3bm2P2tymRYNw6trisoVtSswWhPDNR12ZEhUNh4vIyJsyYsZRg2y11_ghmK5PeRRxSqVwdga-HOuhXhN_KyD-CL7VxHQwpeAmwWXDvPweTpLWzlVoRzOSkCbsluzCW9Sh0rBHPe4pBScaY2oXQsiWt8nm3p6rgfBALsP_8pEdt5W-dHMihTYfsuLNroJRngocnvPhv44F1ODafUwfuLPe-LpG8zIzMGHnaD4GECOatrzOqPjUCnyiHchNFap1HU8khQ",
       e: "AQAB"
     },
-    cipherText: "yc77BRjZm_AomIUSGSm5HzOUqp-8OUdwqD_BS5cZ9G4UWhFH1Dri6bOm_UM9PuK8_jWZBmo48Y75p3zW5sHSAJ0D0uqlfOzK87-bMRa8yjlXVTT6pAFmAxIKqZOjW0kinsZ6p9HubRU-wSOg4MTc7_8gk1vLLWOlqgbnGG33FANkAiH-Ofnc8vsQUvlh1d2o7EzJ5U2pSqgVBmY4Ee5l-tuc-qWiRPvP9bTFWMdKMznqoBwREod3tnK3IsnXqV8xnS4YZ6UvtITUF4HgZb6pPS2JIQwTvA1-xCaiGbWPWVyeSt8JJzeULsa0qNIdW82ryo9d4Q5UpmhTTQw_LOokSg"
+    cipherText: "LhDL6Ov2gPYTGBZmuLHG_E0dcOw8yd57iG3bQUTMSvgT-n0WLIyfrqewmQdrOAmLbOwChvzXAYwFRz_N10O1aeAXyeaBIqCeC2QX8dtx95SLQTb7OBClHyalvlRsvdD4Dhh20VhIuVo725Pm-5Pb0aE2p4GjT2qxGVsAv8Y9ZZeKrJ09bpxKf3i1eDsblpuALZwNX3PwBTIxKY2pMPtC4n-hbRUGMon842UsA3QPIJ8Bi7ZJ7jGHGcPUfWiNJE9-mtBd4N0kpnapYrPxMJ_Jpb3kXpjpeXKek_UlGnzEHKF9LTfymefXqiHR6KDXRUovb3aaDSl_3qNT_Rg1AfqQCQ"
   },
-  iv: "WVtG8HeKA2JL_hvjPuU_dQ",
-  tag: "5zrIFLOfzi7ci1M82MYrrg",
-  cipherText: "dj0cLW-g7RI2_xesbj-r4vjuMUEU26n2prIURoVBH_U"
+  iv: "qEp6ubJXmfxJJPaapc1lhA",
+  tag: "V85TKQAs4oOiWin7SQiIwA",
+  cipherText: "nkcMAZ6zxZi7bn1ofCLOk4tyFYeTLwSrDanBxt85Eys"
+};
+
+const JEF_RSA_OBJECT_1 = {
+  algorithm: "A128CBC-HS256",
+  encryptedKey: {
+    algorithm: "RSA-OAEP-256",
+    keyId: "20170101:mybank:rsa",
+    cipherText: "uy2s4RQTD6NOQOUJrAJmAQbPkXFIcNq-Nl4IpUAkkMqqppmjAsYRV4TBBVL4daJ31A1ckuWzAikJ9xcAS0N4Feo7JnItgEQyYdEsg1GlpszrlFGRO5HX0qnwzQ6zpE7ck1QrUsPryNZxPlLiyJtmSqNKML-guR_Y8qQytqryLapzT804BGve2_yG1F-gU6m8d9xtHRG7_FSqA4XT6Gpoprsf3hQoqdRXYDYXmez_brXWq4TRN34KmXb4Wvv09FsTaq0kKWKRBIub6hNALVTKhV9SMF3ackJB6PtSuJunkScBFiAp3CRwS-QH_okgAQxEVX1SMAsk4C5pjU3_2CsuIg"
+  },
+  iv: "eaOw8A5GaQFGgay2HMTABw",
+  tag: "DFl573wNxN4GlS5_vmdA-g",
+  cipherText: "QsccpGXq_FXtC2abb7RRWOQYz0ddmAB2a-8i1OwSyQ0"
 };
 
 const JEF_SYM_OBJECT = {
   algorithm: "A128CBC-HS256",
-  iv: "zwM_nz_WqSITnIvFtsKn2A",
-  tag: "okU8WueHpp7OD8UptWPAtA",
-  cipherText: "zZI4Z6eNlCENpvq4ScOpeFKODTEl0O1511EeRpfV3YY"
+  iv: "r14zJRA6SwhMycCBsOknrg",
+  tag: "6nTJmg_vr_1LszarbSIyWg",
+  cipherText: "g0BxxJ-mrwAmCVWQuSozK8xbHzpXMvmZCHR888HwqIg"
 };
 
 const ECHD_TEST_PRIVATE_KEY = 
@@ -123,6 +154,7 @@ bRsXt4i5X8MjVp/4s+7z04NY8Psf2MItjoHuZJBHoIbJN4pPlHAISiMKG3I+96PR7bto6bLwFY+l\
 uADEbzdHMqUOo3IN9Tcs8ihi4ELywbAaFTXYTgDQvsigtaLojd5dqyJfWx3eeCNG4cOIFYPkMd1D\
 JJ+xMkjm/RNvgq6inQoO9/3A12WvrQ==\
 -----END PRIVATE KEY-----';
+
 
 const test_private_key =  Keys.createPrivateKeyFromPem(ECHD_TEST_PRIVATE_KEY);
 const test_public_key = Keys.createPublicKeyFromPem(ECHD_TEST_PUBLIC_KEY);
@@ -186,19 +218,37 @@ Assert.deepEqual(ecdhRes.sharedSecret,
                                           Jef.JOSE_A128CBC_HS256_ALG_ID,
                                           ecdhRes.publicKey,
                                           test_private_key));
+test_private_key.setKeyId(JEF_EC_KEY_ID);
+var keySet = [test_private_rsa_key,test_private_key];
 
 var encJson =
    JsonUtil.ObjectWriter.setAsymEncryptionObject(JEF_TEST_STRING,
                                                  Jef.JOSE_A128CBC_HS256_ALG_ID,
                                                  test_private_key.getPublicKey(),
+                                                 null,
                                                  Jef.JOSE_ECDH_ES_ALG_ID).toString();
 console.log(encJson);
 Assert.deepEqual(JsonUtil.ObjectReader.parse(encJson)
-                     .getEncryptionObject().getDecryptedData([test_private_key]),
+                     .getEncryptionObject().getDecryptedData(keySet),
                  JEF_TEST_STRING);
 
-Assert.deepEqual(new JsonUtil.ObjectReader(JEF_ECDH_OBJECT)
-                     .getEncryptionObject().getDecryptedData([test_private_key]),
+var encJson =
+  JsonUtil.ObjectWriter.setAsymEncryptionObject(JEF_TEST_STRING,
+                                                Jef.JOSE_A128CBC_HS256_ALG_ID,
+                                                test_private_key.getPublicKey(),
+                                                JEF_EC_KEY_ID,
+                                                Jef.JOSE_ECDH_ES_ALG_ID).toString();
+console.log(encJson);
+Assert.deepEqual(JsonUtil.ObjectReader.parse(encJson)
+                    .getEncryptionObject().getDecryptedData(keySet),
+                JEF_TEST_STRING);
+
+Assert.deepEqual(new JsonUtil.ObjectReader(JEF_ECDH_OBJECT_1)
+                     .getEncryptionObject().getDecryptedData(keySet),
+                JEF_TEST_STRING);
+
+Assert.deepEqual(new JsonUtil.ObjectReader(JEF_ECDH_OBJECT_2)
+                     .getEncryptionObject().getDecryptedData(keySet),
                  JEF_TEST_STRING);
 
 var symRefKey = Base64Url.decode(JEF_SYM_KEY);
