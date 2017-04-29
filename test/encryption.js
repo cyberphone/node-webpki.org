@@ -44,7 +44,7 @@ const JEF_EC_KEY_ID           = '20170101:mybank:ec';
 const JEF_RSA_KEY_ID          = '20170101:mybank:rsa';
 const JEF_ECDH_OBJECT_2 = {
   algorithm: "A128CBC-HS256",
-  encryptedKey: {
+  keyEncryption: {
     algorithm: "ECDH-ES",
     publicKey: {
       kty: "EC",
@@ -55,65 +55,119 @@ const JEF_ECDH_OBJECT_2 = {
     ephemeralKey: {
       kty: "EC",
       crv: "P-256",
-      x: "rBtn97tjHIxhjqfYXVn1fzquCFmPYwf4CldYeE1mnS8",
-      y: "JP219rw63jasC_7ixwYsD8PijYU2lnvQwvA9e17RPo8"
+      x: "_J9X90M33fg-uaV4N9QM3L0tO1sFvhZaGLLIsuoNmuQ",
+      y: "4yWJzLAt2q2QP9D6FAOOjb4S5nI2-2QAxHCPac57FL8"
     }
   },
-  iv: "bI7Ju1Cyj3Boe-wXoHvaEg",
-  tag: "Qt2Q7S3auu_y4mVvSZoM2Q",
-  cipherText: "ch2k75lE1NQKBeYkJgXpcmY__cQdzvSV701sAGEKGE0"
+  iv: "6yTLJv1H5Ub5Afvm51cEEg",
+  tag: "THN--dnhNqe9IaLBrqBdfw",
+  cipherText: "0ctqLXw1IvMHCNnWWCnqqfP_b1nPWLkyx2yaCiwRUeE"
 };
 
 const JEF_ECDH_OBJECT_1 = {
   algorithm: "A128CBC-HS256",
-  encryptedKey: {
+  keyEncryption: {
     algorithm: "ECDH-ES",
     keyId: "20170101:mybank:ec",
     ephemeralKey: {
       kty: "EC",
       crv: "P-256",
-      x: "ZuESJhuxPPTuloRigAh0aWZrgfFpBgjKQO3qzPFKiKs",
-      y: "_SwkU496ZCpmwiN2WvVVGFMfUstH1mGSZIbcvTtzdtc"
+      x: "zqkUbB6lMYI69Z4Ip1pjrKwULyBnTmJCSDqfN1VZnSI",
+      y: "qxqexZmIILoO_CEdwnNEgzBO7PUk2-Ps2W76hDJl3nc"
     }
   },
-  iv: "FwpBD07mlfkaoIcrEZouig",
-  tag: "MQYMFMpDtjmlxPop42hoQg",
-  cipherText: "ito6qBV4xYTIv7C4-vNs3d95NNRpCZLC6dhkInrWn8M"
+  iv: "gTtETkfbc4rVLDbdPof36Q",
+  tag: "5XfHtJI9YGPCxp87IhT6hg",
+  cipherText: "gIeL6DTCVgEuiy2KSdZkY8NumFarCovCS6q5oQfW8Wg"
+};
+
+const JEF_ECDH_OBJECT_3 = {
+  algorithm: "A128GCM",
+  keyEncryption: {
+    algorithm: "ECDH-ES+A128KW",
+    keyId: "20170101:mybank:ec",
+    ephemeralKey: {
+      kty: "EC",
+      crv: "P-256",
+      x: "goUSoihUKn9FQan7uqhbJQde5IoTTCqYCETmRohHJTA",
+      y: "xpSnkDF5yLFOH4Hu21LlRdlsXPF5Fr3-D2vtZruYyVQ"
+    },
+    encryptedKey: "_eEgYT0_VXx7DlU7L1noFB5pI71kiHVN"
+  },
+  iv: "O-uF-hk1MvX_6OX-",
+  tag: "6kQNdmKaJr_aGIskQ_nWCw",
+  cipherText: "WGLtgaJW-dmsRBc3M74MVdKIR_JF0g"
+};
+
+const JEF_ECDH_OBJECT_4 = {
+  algorithm: "A256CBC-HS512",
+  keyEncryption: {
+    algorithm: "ECDH-ES+A256KW",
+    keyId: "20170101:mybank:ec",
+    ephemeralKey: {
+      kty: "EC",
+      crv: "P-256",
+      x: "IY40ny5m_aQp_5Acu541h4N6_ifk3elZpTu_6MBADSk",
+      y: "4Pwn4hl0CG7kmHTqdkbH1X3-TulOkuXvAAZPWdf0Ox4"
+    },
+    encryptedKey: "fo6KNjwZ6NqQ9_ICDrRqVlpMqfM7K4YhUleWPhrnZPOFfrh0RKptQDneDnmm4ZssH1s7Qvxtp7tD9KESvvpAgJ5FikVLmDXi"
+  },
+  iv: "q0egWYttaxh2Jl3ZXfVxyw",
+  tag: "F8eet3Zrv5Vwf_KrHMfWsfusMgNe5U3l5zC7KpR4frA",
+  cipherText: "Yyj6Vn0JFwWcoQ3EilmTNu4HIgtt-30vNwYuPY0qp-I"
+};
+
+const JEF_ECDH_OBJECT_5 = {
+  algorithm: "A192CBC-HS384",
+  keyEncryption: {
+    algorithm: "ECDH-ES+A192KW",
+    keyId: "20170101:mybank:ec",
+    ephemeralKey: {
+      kty: "EC",
+      crv: "P-256",
+      x: "OMq5d4idcp7qTDKTPcsrCGyFjZii0IZCwy6bf3Wl2FQ",
+      y: "DQU3btsVZP9jnh4rcg1krlkPDDDC84R69pJKKXIRkCg"
+    },
+    encryptedKey: "WuyALx3mLq8DSMNggy4kEt5V3Gkk1EDT24iDB80Vn7jFvqef-MoPDPBeQlNT6yGoCmednkabJEA"
+  },
+  iv: "3AAW7__UdsZWMI0-uFuxvg",
+  tag: "CVcdORmyGi_QcmLwu0cZ_9j_8P8803x8",
+  cipherText: "-wF1RADop2hnKXADDSLxJGfVy46yqpt4Zym7Tf4qx38"
 };
 
 const JEF_RSA_OBJECT_2 = {
   algorithm: "A128CBC-HS256",
-  encryptedKey: {
+  keyEncryption: {
     algorithm: "RSA-OAEP-256",
     publicKey: {
       kty: "RSA",
       n: "y__yOXXaisKqCW2UCcOxpZRCCIdz04074KrnQXMOjSulnaB-kBUUV49Gc8jBI1k7IP0gLdtIPjv2WVFaewt3bm2P2tymRYNw6trisoVtSswWhPDNR12ZEhUNh4vIyJsyYsZRg2y11_ghmK5PeRRxSqVwdga-HOuhXhN_KyD-CL7VxHQwpeAmwWXDvPweTpLWzlVoRzOSkCbsluzCW9Sh0rBHPe4pBScaY2oXQsiWt8nm3p6rgfBALsP_8pEdt5W-dHMihTYfsuLNroJRngocnvPhv44F1ODafUwfuLPe-LpG8zIzMGHnaD4GECOatrzOqPjUCnyiHchNFap1HU8khQ",
       e: "AQAB"
     },
-    cipherText: "LhDL6Ov2gPYTGBZmuLHG_E0dcOw8yd57iG3bQUTMSvgT-n0WLIyfrqewmQdrOAmLbOwChvzXAYwFRz_N10O1aeAXyeaBIqCeC2QX8dtx95SLQTb7OBClHyalvlRsvdD4Dhh20VhIuVo725Pm-5Pb0aE2p4GjT2qxGVsAv8Y9ZZeKrJ09bpxKf3i1eDsblpuALZwNX3PwBTIxKY2pMPtC4n-hbRUGMon842UsA3QPIJ8Bi7ZJ7jGHGcPUfWiNJE9-mtBd4N0kpnapYrPxMJ_Jpb3kXpjpeXKek_UlGnzEHKF9LTfymefXqiHR6KDXRUovb3aaDSl_3qNT_Rg1AfqQCQ"
+    encryptedKey: "e48p8LGpipxjN-2muPxLwBCn-gmt9supzVFqMvK9Dd40PtpGGHtn1NH2J4AaLTn-dtxPwMvb0JyabQUYYgC4_RZ-M9ZGOBIrbexK87ABsn-dCTdfolycHKyWldZOV4lmu0cN6qyOa2guW00RkIwVI08LOJOQt71Xe1YC0XjuOB7SjUmUPZMTg6xDlobdlTkiM8UppyfJHLkwHWwIDWTbtCei6rQyJKSvlxZMxD0buBGVhrw41UArQ9mfedxRrxiopo7GyDg6-BeIFH77KQBE0UzstTn_wm2f2xAMZ0IRku5CGYOxNq_yD638vxvTNeL3I5O3f4SZW7ymRVQCDgAqNg"
   },
-  iv: "qEp6ubJXmfxJJPaapc1lhA",
-  tag: "V85TKQAs4oOiWin7SQiIwA",
-  cipherText: "nkcMAZ6zxZi7bn1ofCLOk4tyFYeTLwSrDanBxt85Eys"
+  iv: "QhI6ZZNgFjrYhHH4wImROw",
+  tag: "eDai7aE5mjO_t1VgynAsQA",
+  cipherText: "cqdwyJlHRMxmZjxEiAMUubMm7-isAYaj4yQrfJS3AQc"
 };
 
 const JEF_RSA_OBJECT_1 = {
   algorithm: "A128CBC-HS256",
-  encryptedKey: {
+  keyEncryption: {
     algorithm: "RSA-OAEP-256",
     keyId: "20170101:mybank:rsa",
-    cipherText: "uy2s4RQTD6NOQOUJrAJmAQbPkXFIcNq-Nl4IpUAkkMqqppmjAsYRV4TBBVL4daJ31A1ckuWzAikJ9xcAS0N4Feo7JnItgEQyYdEsg1GlpszrlFGRO5HX0qnwzQ6zpE7ck1QrUsPryNZxPlLiyJtmSqNKML-guR_Y8qQytqryLapzT804BGve2_yG1F-gU6m8d9xtHRG7_FSqA4XT6Gpoprsf3hQoqdRXYDYXmez_brXWq4TRN34KmXb4Wvv09FsTaq0kKWKRBIub6hNALVTKhV9SMF3ackJB6PtSuJunkScBFiAp3CRwS-QH_okgAQxEVX1SMAsk4C5pjU3_2CsuIg"
+    encryptedKey: "EcF4GdB8VmJ3I-QfRORpYPa-2ja9z42KPeaVJH_C0ngEkhNHBT6haGqHJcOMBSUxqhZVJGgeA2lCSsPZfiuI0u6OcL20tuvGzvK3hYpGWPUQut4-5GKKoqaSe0Iw2VQRKLueNlf6OLQPaO70XJsqybas6IOMp2Bf7sxCO1WIL33x_X4oNNCz4pGY9cCvReUoIKUPdvcN0tOo-Yak4b-5UPLhuqeyBODBX6mG235hxEWeVOmeCQ1huh2ufch50ktZ1MyoHl2aBPIB6TEMTDmfFthk-AxXkyGoYQ_wpSF15hf8N00XuDgExyXhaezKXaPFqbREAWCtU0zCrqeLlu7Trg"
   },
-  iv: "eaOw8A5GaQFGgay2HMTABw",
-  tag: "DFl573wNxN4GlS5_vmdA-g",
-  cipherText: "QsccpGXq_FXtC2abb7RRWOQYz0ddmAB2a-8i1OwSyQ0"
+  iv: "hFCQiZJ5drWDYn7mqAobTA",
+  tag: "N30VN8KmyK8tzwjSWrBvzw",
+  cipherText: "NvU8AO7ZZ4JTytXPfNh0JZn8oAtp_FVTufMJX-nuyQc"
 };
 
 const JEF_SYM_OBJECT = {
   algorithm: "A128CBC-HS256",
-  iv: "r14zJRA6SwhMycCBsOknrg",
-  tag: "6nTJmg_vr_1LszarbSIyWg",
-  cipherText: "g0BxxJ-mrwAmCVWQuSozK8xbHzpXMvmZCHR888HwqIg"
+  iv: "3FKQ15sb0iffjlzayFsSPA",
+  tag: "3wIUITJQ0sLk7GuNDRCX_g",
+  cipherText: "VLUNNBJdwhK-Sd9RPbmZS52e-AZIcThHlELm_IQ8uCY"
 };
 
 const ECHD_TEST_PRIVATE_KEY = 
