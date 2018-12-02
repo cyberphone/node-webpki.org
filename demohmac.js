@@ -4,7 +4,7 @@ const Jcs      = require('webpki.org').Jcs;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 // Define a suitable secret key
-var secretKey = new Buffer('F4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
+var secretKey = Buffer.from('F4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
 
 // Initiate the signer with key and algorithm.  Finally, add an (optional) keyId
 var signer = new Jcs.Signer(secretKey, 'HS256').setKeyId('mykey');

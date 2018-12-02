@@ -120,7 +120,7 @@ function base64run() {
 function encodePublicKey(key, spkiBase64URL) {
   var spki = Base64Url.decode(spkiBase64URL);
   if (key.pem != '-----BEGIN PUBLIC KEY-----\n' +
-                 new Buffer(spki).toString('base64') +
+                 Buffer.from(spki).toString('base64') +
                  '\n-----END PUBLIC KEY-----\n') {
     throw new TypeError('Key mismatch: ' + spkiBase64URL);
   }
@@ -154,7 +154,7 @@ zwFJgR6fWnBRyg6X0P_uTQOlll1orTqd6a0QTTjnm1XlM5XF8g5SyqhIO4kLUmvJvwEHaXHHkbn8N4gH
 BCDmXImhOHxbhRvyiY2XWcDFAGt_60IzLAnPUof2Rv-aPNYJY6qa0yvnJmQp4yNPsIpHYpj9Sa3rctEC2OELZy-HTlDBVyzEYwnmDXtvhjoPEaUZUyHaJT\
 C_LZMOTsgJqDT8mOvHyZpLH_f7u55mXDBoXF0iG9sikiRVndkJ18wZmNRow2UmK3QB6G2kUYxt3ltPOjDgADLKwIDAQAB');
 
-var secretKey = new Buffer('F4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
+var secretKey = Buffer.from('F4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
 var hmac = new Jcs.Signer(secretKey, 'HS256').setKeyId('mykey').sign({'k':6});
 console.log(JSON.stringify(hmac));
 var hmacDecoder = new Jcs.Verifier().decodeSignature(hmac);

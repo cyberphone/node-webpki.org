@@ -331,7 +331,7 @@ cipher.update(aesRes);
 Assert.deepEqual(new Uint8Array(cipher.final()), aesData);
 
 function hex2Bin(hex) {
-  return new Uint8Array(new Buffer(hex,'hex'));
+  return new Uint8Array(Buffer.from(hex,'hex'));
 }
 
 const k = hex2Bin('000102030405060708090a0b0c0d0e0f' +
