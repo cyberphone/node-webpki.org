@@ -3,7 +3,7 @@
 const Fs = require('fs');
 
 const Keys     = require('webpki.org').Keys;
-const Jcs      = require('webpki.org').Jcs;
+const Jsf      = require('webpki.org').Jsf;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 // Load private key and certificate path
@@ -12,7 +12,7 @@ const privateKey = Keys.createPrivateKeyFromPem(keyData);
 const certificatePath = Keys.createCertificatesFromPem(keyData);
 
 // Initiate the signer
-var signer = new Jcs.Signer(privateKey);
+var signer = new Jsf.Signer(privateKey);
 
 // Indicate that we want to include a certificate path
 signer.setCertificatePath(certificatePath, true);
@@ -32,7 +32,7 @@ console.log(JsonUtil.prettyPrint(signedJavaScript));
 const trustedCAs = Keys.createCertificatesFromPem(Fs.readFileSync(__dirname + '/test/payment-network-ca.pem'));
 
 // Create a verifier object
-var verifier = new Jcs.Verifier();
+var verifier = new Jsf.Verifier();
 
 // Call decoding.  This will check that signature is technically correct
 var result = verifier.decodeSignature(signedJavaScript);

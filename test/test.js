@@ -28,7 +28,7 @@ const assert = require('assert');
 
 const Keys = require('..').Keys;
 const Base64Url = require('..').Base64Url;
-const Jcs = require('..').Jcs;
+const Jsf = require('..').Jsf;
 const CertRead = require('./certread');
 const Hash = require('..').Hash;
 const Random = require('..').Random;
@@ -47,9 +47,9 @@ const ecCertificatePath = Keys.createCertificatesFromPem(readFile('certificate-p
 const privateRsaPkcs8Key = Keys.createPrivateKeyFromPem(readFile('private-rsa-pkcs8.pem'));
 
 function signStuff(privateKey, algorithm) {
-  var res = new Jcs.Signer(privateKey, algorithm).sign({'statement':'Hello signed world!'});
-  var result = new Jcs.Verifier().decodeSignature(res);
-  if (result.getSignatureType() != Jcs.SIGNATURE_TYPE.PUBLIC_KEY) {
+  var res = new Jsf.Signer(privateKey, algorithm).sign({'statement':'Hello signed world!'});
+  var result = new Jsf.Verifier().decodeSignature(res);
+  if (result.getSignatureType() != Jsf.SIGNATURE_TYPE.PUBLIC_KEY) {
     throw new TypeError('Wrong signature type');
   }
 }
@@ -59,14 +59,14 @@ signStuff(privateEcP256Pkcs1Key, 'ES512');
 signStuff(privateRsaPkcs8Key);
 
 for (var q = 0; q < 1000; q++) {
-  new Jcs.Verifier().decodeSignature(new Jcs.Signer(privateEcP256Pkcs1Key).sign({'statement':'Hello signed world!'}));
+  new Jsf.Verifier().decodeSignature(new Jsf.Signer(privateEcP256Pkcs1Key).sign({'statement':'Hello signed world!'}));
 }
 
-var certSigner = new Jcs.Signer(privateEcP256Pkcs1Key)
+var certSigner = new Jsf.Signer(privateEcP256Pkcs1Key)
   .setCertificatePath(ecCertificatePath, true);
 var certRes = certSigner.sign({'statement':'Hello signed world!'});
 console.log(JSON.stringify(certRes));
-if (new Jcs.Verifier().decodeSignature(certRes).getSignatureType() != Jcs.SIGNATURE_TYPE.PKI) {
+if (new Jsf.Verifier().decodeSignature(certRes).getSignatureType() != Jsf.SIGNATURE_TYPE.PKI) {
   throw new TypeError('Expected PKI');
 }
 
@@ -155,10 +155,10 @@ BCDmXImhOHxbhRvyiY2XWcDFAGt_60IzLAnPUof2Rv-aPNYJY6qa0yvnJmQp4yNPsIpHYpj9Sa3rctEC
 C_LZMOTsgJqDT8mOvHyZpLH_f7u55mXDBoXF0iG9sikiRVndkJ18wZmNRow2UmK3QB6G2kUYxt3ltPOjDgADLKwIDAQAB');
 
 var secretKey = Buffer.from('F4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
-var hmac = new Jcs.Signer(secretKey, 'HS256').setKeyId('mykey').sign({'k':6});
+var hmac = new Jsf.Signer(secretKey, 'HS256').setKeyId('mykey').sign({'k':6});
 console.log(JSON.stringify(hmac));
-var hmacDecoder = new Jcs.Verifier().decodeSignature(hmac);
-if (hmacDecoder.getSignatureType() != Jcs.SIGNATURE_TYPE.HMAC) {
+var hmacDecoder = new Jsf.Verifier().decodeSignature(hmac);
+if (hmacDecoder.getSignatureType() != Jsf.SIGNATURE_TYPE.HMAC) {
   throw new TypeError('Wrong kind of signature');
 }
 console.log('hmac=' + hmacDecoder.verifyHmac(secretKey));

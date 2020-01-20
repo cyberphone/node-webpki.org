@@ -3,7 +3,7 @@
 const Fs = require('fs');
 
 const Keys = require('webpki.org').Keys;
-const Jcs = require('webpki.org').Jcs;
+const Jsf = require('webpki.org').Jsf;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 function readPrivateKey(path) {
@@ -14,7 +14,7 @@ function readPrivateKey(path) {
 const privateKey = readPrivateKey('private-p256-pkcs8.pem');
 
 // Initiate the signer
-var signer = new Jcs.Signer(privateKey);
+var signer = new Jsf.Signer(privateKey);
 
 // Create an object to sign
 var jsonObject = {'statement':'Hello signed world!'};
@@ -36,7 +36,7 @@ function readPublicKey(path) {
 const publicKey = readPublicKey('public-p256.pem');
 
 // Create a verifier object
-var verifier = new Jcs.Verifier();
+var verifier = new Jsf.Verifier();
 
 // Call decoding.  This will check that signature is technically correct
 var result = verifier.decodeSignature(signedJavaScript);

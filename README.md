@@ -1,9 +1,8 @@
-# JCS and JEF for "node.js"
+# JSF and JEF for "node.js"
 
 Very early documentation, stay tuned :-)
 
-JCS (JSON Cleartext Signature) rationale: https://cyberphone.github.io/doc/security/jsonsignatures.html<br>
-JCS specification: https://cyberphone.github.io/doc/security/jcs.html<br>
+JSF (JSON Signature Format) specification: https://cyberphone.github.io/doc/security/jsf.html<br>
 JEF (JSON Encryption Format) specification: https://cyberphone.github.io/doc/security/jef.html
 
 ### Installation
@@ -32,7 +31,7 @@ Validation success=true
 const Fs = require('fs');
 
 const Keys     = require('webpki.org').Keys;
-const Jcs      = require('webpki.org').Jcs;
+const Jsf      = require('webpki.org').Jsf;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 function readPrivateKey(path) {
@@ -43,7 +42,7 @@ function readPrivateKey(path) {
 const privateKey = readPrivateKey('private-p256-pkcs8.pem');
 
 // Initiate the signer
-var signer = new Jcs.Signer(privateKey);
+var signer = new Jsf.Signer(privateKey);
 
 // Create an object to sign
 var jsonObject = {'statement':'Hello signed world!'};
@@ -86,7 +85,7 @@ function readPublicKey(path) {
 const publicKey = readPublicKey('public-p256.pem');
 
 // Create a verifier object
-var verifier = new Jcs.Verifier();
+var verifier = new Jsf.Verifier();
 
 // Call decoding.  This will check that the signature is technically correct
 var result = verifier.decodeSignature(signedJavaScript);
@@ -106,7 +105,7 @@ signatures only using public keys.  You simply need to add the path.
 const Fs = require('fs');
 
 const Keys     = require('webpki.org').Keys;
-const Jcs      = require('webpki.org').Jcs;
+const Jsf      = require('webpki.org').Jsf;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 // Load private key and certificate path
@@ -115,7 +114,7 @@ const privateKey = Keys.createPrivateKeyFromPem(keyData);
 const certificatePath = Keys.createCertificatesFromPem(keyData);
 
 // Initiate the signer
-var signer = new Jcs.Signer(privateKey);
+var signer = new Jsf.Signer(privateKey);
 
 // Indicate that we want to include a certificate path
 signer.setCertificatePath(certificatePath, true);
@@ -163,7 +162,7 @@ Validation requires that you provide a collection of CA certificates.
 const trustedCAs = Keys.createCertificatesFromPem(Fs.readFileSync(__dirname + '/test/payment-network-ca.pem'));
 
 // Create a verifier object
-var verifier = new Jcs.Verifier();
+var verifier = new Jsf.Verifier();
 
 // Call decoding.  This will check that the signature is technically correct
 var result = verifier.decodeSignature(signedJavaScript);
@@ -177,14 +176,14 @@ console.log('Validation success=' + result.verifyTrust(trustedCAs));
 ```javascript
 'use strict';
 
-const Jcs      = require('webpki.org').Jcs;
+const Jsf      = require('webpki.org').Jsf;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 // Define a suitable secret key
 var secretKey = new Buffer('F4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
 
 // Initiate the signer with key and algorithm.  Finally, add an (optional) keyId
-var signer = new Jcs.Signer(secretKey, 'HS256').setKeyId('mykey');
+var signer = new Jsf.Signer(secretKey, 'HS256').setKeyId('mykey');
 
 // Create an object to sign
 var jsonObject = {'statement':'Hello signed world!'};
@@ -198,7 +197,7 @@ console.log(JsonUtil.prettyPrint(signedJavaScript));
 // Now we could verify the signed object we just created
 
 // Create a verifier object
-var verifier = new Jcs.Verifier();
+var verifier = new Jsf.Verifier();
 
 // Call decoding.  This will check that the signature is technically correct
 var result = verifier.decodeSignature(signedJavaScript);
