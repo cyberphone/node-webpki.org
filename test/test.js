@@ -29,13 +29,10 @@ const assert    = require('assert');
 const Keys      = require('..').Keys;
 const Base64Url = require('..').Base64Url;
 const Jsf       = require('..').Jsf;
-const CertRead  = require('./certread');
 const Hash      = require('..').Hash;
 const Random    = require('..').Random;
-const Logging   = require('..').Logging;
 
-var logger = new Logging.Logger(__filename);
-logger.info('Starting');
+console.log('Starting');
 
 function readFile(path) {
   return Fs.readFileSync(__dirname + '/' + path).toString();
@@ -45,56 +42,161 @@ function readJSON(path) {
   return JSON.parse(readFile(path));
 }
 
-const publicEcP256Key = Keys.createPublicKeyFromPem(readFile('public-p256.pem'));
-const privateEcP256Pkcs1Key = Keys.createPrivateKeyFromPem(readFile('private-p256-pkcs8.pem'));
-const ecCertificatePath = Keys.createCertificatesFromPem(readFile('certificate-p256.pem'));
-const privateRsaPkcs8Key = Keys.createPrivateKeyFromPem(readFile('private-rsa-pkcs8.pem'));
+// Load trust store
+const trustedCAs = Keys.createCertificatesFromPem(readFile('rootca.pem'));
 
-function signStuff(privateKey, algorithm) {
-  var res = new Jsf.Signer(privateKey, algorithm).sign({'statement':'Hello signed world!'});
-  var result = new Jsf.Verifier().decodeSignature(res);
-  if (result.getSignatureType() != Jsf.SIGNATURE_TYPE.PUBLIC_KEY) {
-    throw new TypeError('Wrong signature type');
-  }
-}
-
-signStuff(privateEcP256Pkcs1Key);
-signStuff(privateEcP256Pkcs1Key, 'ES512');
-signStuff(privateRsaPkcs8Key);
-
-for (var q = 0; q < 1000; q++) {
-  new Jsf.Verifier().decodeSignature(new Jsf.Signer(privateEcP256Pkcs1Key).sign({'statement':'Hello signed world!'}));
-}
-
-var certSigner = new Jsf.Signer(privateEcP256Pkcs1Key)
-  .setCertificatePath(ecCertificatePath);
-var certRes = certSigner.sign({'statement':'Hello signed world!'});
-console.log(JSON.stringify(certRes));
-if (new Jsf.Verifier().decodeSignature(certRes).getSignatureType() != Jsf.SIGNATURE_TYPE.PKI) {
-  throw new TypeError('Expected PKI');
-}
+// Load not so trusted store
+const otherCAs = Keys.createCertificatesFromPem(readFile('otherca.pem'));
 
 ["p256#es256","p384#es384", "p521#es512","r2048#rs256"].forEach((element) => {
+//  console.log(element);
+  var privateKey = Keys.createPrivateKeyFromPem(readFile(element.substring(0, element.length -6) + 'privatekey.pem'));
+  var publicKey = privateKey.getPublicKey();
+
+  // Predefined JSF with JWK
   var jsObject = readJSON(element + '@jwk.json');
   var decodedSignature = new Jsf.Verifier().decodeSignature(jsObject);
   if (decodedSignature.getSignatureType() != Jsf.SIGNATURE_TYPE.PUBLIC_KEY) {
     throw new TypeError('Expected PUBLIC_KEY');
   }
-  console.log(element);
-  var privateKey = Keys.createPrivateKeyFromPem(readFile(element.substring(0, element.length -6) + 'privatekey.pem'));
-  decodedSignature.verifyPublicKey(privateKey.getPublicKey());
+  decodedSignature.verifyPublicKey(publicKey);
+
+  // Predefined JSF using implicit key
+  var jsObject = readJSON(element + '@imp.json');
+  var verifier = new Jsf.Verifier();
+  verifier.setRequirePublicKeyInfo(false);
+  var decodedSignature = verifier.decodeSignature(jsObject);
+  if (decodedSignature.getSignatureType() != Jsf.SIGNATURE_TYPE.PUBLIC_KEY) {
+    throw new TypeError('Expected PUBLIC_KEY');
+  }
+  decodedSignature.verifyPublicKey(publicKey);
+ 
+  // Predefined JSF with certificate path
+  var jsObject = readJSON(element + '@cer.json');
+  decodedSignature = new Jsf.Verifier().decodeSignature(jsObject);
+  if (decodedSignature.getSignatureType() != Jsf.SIGNATURE_TYPE.PKI) {
+    throw new TypeError('Expected PKI');
+  }
+  decodedSignature.verifyTrust(trustedCAs);
+  verifier = new Jsf.Verifier();
+  verifier.setThrowOnErrors(false);
+  decodedSignature = verifier.decodeSignature(jsObject);
+  if (decodedSignature.getSignatureType() != Jsf.SIGNATURE_TYPE.PKI) {
+    throw new TypeError('Expected PKI');
+  }
+  if (decodedSignature.verifyTrust(otherCAs)) {
+    throw new TypeError('Should not be trusted');
+  }
+
+  // Create JSF with JWK
   var signer = new Jsf.Signer(privateKey);
   jsObject = signer.sign({'statement':'Hello signed world!'});
   decodedSignature = new Jsf.Verifier().decodeSignature(jsObject);
   if (decodedSignature.getSignatureType() != Jsf.SIGNATURE_TYPE.PUBLIC_KEY) {
+    throw new TypeError('Expected PUBLIC_KEY');
+  }
+  decodedSignature.verifyPublicKey(publicKey);
+
+  // Create JSF with certificate path
+  var signer = new Jsf.Signer(privateKey);
+  var certPath = Keys.createCertificatesFromPem(readFile(element.substring(0, element.length -6) + 'certpath.pem'));
+  signer.setCertificatePath(certPath);
+  jsObject = signer.sign({'statement':'Hello signed world!'});
+  decodedSignature = new Jsf.Verifier().decodeSignature(jsObject);
+  if (decodedSignature.getSignatureType() != Jsf.SIGNATURE_TYPE.PKI) {
     throw new TypeError('Expected PKI');
   }
-  decodedSignature.verifyPublicKey(privateKey.getPublicKey());
+
+  // Create JSF with JWK and custom signature label
   signer = new Jsf.Signer(privateKey);
   signer.setSignatureLabel("attestation");
   jsObject = signer.sign({'statement':'Hello signed world!'});
   decodedSignature = new Jsf.Verifier("attestation").decodeSignature(jsObject);
 });
+
+function destroyer(doBadThings) {
+  var jsObject = readJSON('p256#es256@jwk.json');
+  var ok = false;
+  try {
+    doBadThings(jsObject);
+    var decodedSignature = new Jsf.Verifier().decodeSignature(jsObject);
+    ok = true;
+  } catch (e) {
+    var msg = e.toString();
+    var q = msg.indexOf('\n');
+    if (q <= 0) {
+      q = msg.length;
+    }
+    console.log('*** ' + msg.substring(0, q));
+  }
+  if (ok) {
+    throw new TypeError('Didn\'t throw!');
+  }
+}
+
+console.log("  BEGIN ERROR CASES");
+
+// Modify data
+destroyer(function(o){
+  o.id = 2200064; 
+});
+
+// Remove signature object
+destroyer(function(o){
+  delete o.signature; 
+});
+
+// Modify algorithm
+destroyer(function(o){
+  o.signature.algorithm ="crap"; 
+});
+
+// Modify algorithm
+destroyer(function(o){
+  o.signature.algorithm ="HS256"; 
+});
+
+// Modify algorithm
+destroyer(function(o){
+  o.signature.algorithm ="RS256"; 
+});
+
+// Modify algorithm
+destroyer(function(o){
+  delete o.signature.algorithm; 
+});
+
+// Remove public key
+destroyer(function(o){
+  delete o.signature.publicKey; 
+});
+
+// Change EC parameters
+destroyer(function(o){
+  o.signature.publicKey.x = o.signature.publicKey.y; 
+});
+
+// Set wrong key type
+destroyer(function(o){
+  o.signature.publicKey.kty = "RSA"; 
+});
+
+// Set wrong curve
+destroyer(function(o){
+  o.signature.publicKey.crv = "crap"; 
+});
+
+// Set wrong curve
+destroyer(function(o){
+  o.signature.publicKey.crv = "P-521"; 
+});
+
+// Modify signature
+destroyer(function(o){
+  o.signature.value = "daLAAenX3yOC7ycVyfjIe3tLyrH0U04lPcnQ7ct72ixryZVHdAWQazgDlWhpIDnrgLC0Pq03AvgsCc4ROOCInQ";
+});
+
+console.log("  END ERROR CASES");
 
 // CertRead.scanCerts();
 
@@ -182,12 +284,21 @@ C_LZMOTsgJqDT8mOvHyZpLH_f7u55mXDBoXF0iG9sikiRVndkJ18wZmNRow2UmK3QB6G2kUYxt3ltPOj
 
 var secretKey = Buffer.from('F4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
 var hmac = new Jsf.Signer(secretKey, 'HS256').setKeyId('mykey').sign({'k':6});
-console.log(JSON.stringify(hmac));
 var hmacDecoder = new Jsf.Verifier().decodeSignature(hmac);
 if (hmacDecoder.getSignatureType() != Jsf.SIGNATURE_TYPE.HMAC) {
   throw new TypeError('Wrong kind of signature');
 }
-console.log('hmac=' + hmacDecoder.verifyHmac(secretKey));
+hmacDecoder.verifyHmac(secretKey);
+var wrongSecretKey = Buffer.from('B4C74F3398C49CF46D93EC9818832661A40BAE4D204D75503614102074346909', 'hex');
+var verifier = new Jsf.Verifier();
+verifier.setThrowOnErrors(false);
+hmacDecoder = verifier.decodeSignature(hmac);
+if (hmacDecoder.getSignatureType() != Jsf.SIGNATURE_TYPE.HMAC) {
+  throw new TypeError('Wrong kind of signature');
+}
+if (hmacDecoder.verifyHmac(wrongSecretKey)) {
+  throw new TypeError('Should be invalid');
+}
 
 function hashJsonObject(hashAlgorithm, expectedResult) {
   assert.equal(Base64Url.encode(Hash.hashObject(hashAlgorithm, 
@@ -202,4 +313,4 @@ hashJsonObject('SHA512', '16bFgJsInlap0tWJnLeDH8UUvZvBLUbrJrfiKLfseiGV5-RL_5MNDT
 assert.equal(Random.generateRandomNumber(5).length, 5);
 assert.equal(Random.generateRandomNumber(64).length, 64);
 
-logger.info('Done!');
+console.log('Successful Testing!');

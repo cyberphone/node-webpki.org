@@ -1,7 +1,5 @@
 # JSF and JEF for "node.js"
 
-Very early documentation, stay tuned :-)
-
 JSF (JSON Signature Format) specification: https://cyberphone.github.io/doc/security/jsf.html<br>
 JEF (JSON Encryption Format) specification: https://cyberphone.github.io/doc/security/jef.html
 
@@ -30,16 +28,16 @@ Validation success=true
 
 const Fs = require('fs');
 
-const Keys     = require('webpki.org').Keys;
-const Jsf      = require('webpki.org').Jsf;
+const Keys = require('webpki.org').Keys;
+const Jsf = require('webpki.org').Jsf;
 const JsonUtil = require('webpki.org').JsonUtil;
 
 function readPrivateKey(path) {
   return Keys.createPrivateKeyFromPem(Fs.readFileSync(__dirname + '/test/' + path));
 }
 
-// Load a private key
-const privateKey = readPrivateKey('private-p256-pkcs8.pem');
+// Load a private key in PKCS #8/PEM format
+const privateKey = readPrivateKey('p256privatekey.pem');
 
 // Initiate the signer
 var signer = new Jsf.Signer(privateKey);
@@ -48,10 +46,10 @@ var signer = new Jsf.Signer(privateKey);
 var jsonObject = {'statement':'Hello signed world!'};
 
 // Perform signing
-var signedJavaScript = signer.sign(jsonObject);
+var signedObject = signer.sign(jsonObject);
 
 // Print it on the console as "pretty" (but legal) JSON.
-console.log(JsonUtil.prettyPrint(signedJavaScript));
+console.log(JsonUtil.prettyPrint(signedObject));
 ```
 
 ### Resulting JSON string
@@ -64,10 +62,10 @@ console.log(JsonUtil.prettyPrint(signedJavaScript));
     "publicKey": {
       "kty": "EC",
       "crv": "P-256",
-      "x": "67f720OvQfRJaolZjIz_l-5qkCCJ0wK9MljNCOga-00",
-      "y": "rDase7PLLOrppIfJpSHdj8vIjVz1BAi8tIFR0fmeyLY"
+      "x": "censDzcMEkgiePz6DXB7cDuwFemshAFR90UNVQFCg8Q",
+      "y": "xq8rze6ewG0-eVcSF72J77gKiD0IHnzpwHaU7t6nVeY"
     },
-    "value": "drk3GbD_ETa1VRAnoNeqs4tHHzsNebaEKFfQrF7qS0FQ01cS_tFcDhCL2zHi1iGVZQtTZ07nN1-DYtLLxbZJjg"
+    "value": "9JV3WcUU5SmV0v3mVXZubOpRE5bgjOVaPFBnw6ZcRMN8A7bYHt8U7F9qYVd9ZDiSDZRPEhCDSGnDeB6VZ7wnVA"
   }
 }
 ```
@@ -82,16 +80,19 @@ function readPublicKey(path) {
 }
 
 // Load a matching public key
-const publicKey = readPublicKey('public-p256.pem');
+const publicKey = readPublicKey('p256publickey.pem');
 
 // Create a verifier object
 var verifier = new Jsf.Verifier();
 
 // Call decoding.  This will check that the signature is technically correct
-var result = verifier.decodeSignature(signedJavaScript);
+var result = verifier.decodeSignature(signedObject);
 
-// Now check if the anticipated key was used
-console.log('Validation success=' + result.verifyPublicKey(publicKey));
+// Now check if the anticipated key was used as well
+result.verifyPublicKey(publicKey);
+
+// If we got here all is good...
+console.log('Validation successful!');
 ```
 
 ### Using Certificates

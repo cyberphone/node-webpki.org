@@ -10,8 +10,8 @@ function readPrivateKey(path) {
   return Keys.createPrivateKeyFromPem(Fs.readFileSync(__dirname + '/test/' + path));
 }
 
-// Load a private key
-const privateKey = readPrivateKey('private-p256-pkcs8.pem');
+// Load a private key in PKCS #8/PEM format
+const privateKey = readPrivateKey('p256privatekey.pem');
 
 // Initiate the signer
 var signer = new Jsf.Signer(privateKey);
@@ -33,7 +33,7 @@ function readPublicKey(path) {
 }
 
 // Load a matching public key
-const publicKey = readPublicKey('public-p256.pem');
+const publicKey = readPublicKey('p256publickey.pem');
 
 // Create a verifier object
 var verifier = new Jsf.Verifier();
@@ -41,5 +41,8 @@ var verifier = new Jsf.Verifier();
 // Call decoding.  This will check that the signature is technically correct
 var result = verifier.decodeSignature(signedJavaScript);
 
-// Now check if the anticipated key was used
-console.log('Validation success=' + result.verifyPublicKey(publicKey));
+// Now check if the anticipated key was used as well
+result.verifyPublicKey(publicKey);
+
+// If we got here all is good...
+console.log('Validation successful!'); 
