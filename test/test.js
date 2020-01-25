@@ -1,5 +1,5 @@
 /*
- *  Copyright 2006-2017 WebPKI.org (http://webpki.org).
+ *  Copyright 2017-2020 WebPKI.org (http://webpki.org).
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,22 +23,26 @@
 
 // Unit testing suite
 
-const Fs = require('fs');
-const assert = require('assert');
+const Fs        = require('fs');
+const assert    = require('assert');
 
-const Keys = require('..').Keys;
+const Keys      = require('..').Keys;
 const Base64Url = require('..').Base64Url;
-const Jsf = require('..').Jsf;
-const CertRead = require('./certread');
-const Hash = require('..').Hash;
-const Random = require('..').Random;
-const Logging = require('..').Logging;
+const Jsf       = require('..').Jsf;
+const CertRead  = require('./certread');
+const Hash      = require('..').Hash;
+const Random    = require('..').Random;
+const Logging   = require('..').Logging;
 
 var logger = new Logging.Logger(__filename);
 logger.info('Starting');
 
 function readFile(path) {
   return Fs.readFileSync(__dirname + '/' + path).toString();
+}
+
+function readJSON(path) {
+  return JSON.parse(readFile(path));
 }
 
 const publicEcP256Key = Keys.createPublicKeyFromPem(readFile('public-p256.pem'));
@@ -63,14 +67,36 @@ for (var q = 0; q < 1000; q++) {
 }
 
 var certSigner = new Jsf.Signer(privateEcP256Pkcs1Key)
-  .setCertificatePath(ecCertificatePath, true);
+  .setCertificatePath(ecCertificatePath);
 var certRes = certSigner.sign({'statement':'Hello signed world!'});
 console.log(JSON.stringify(certRes));
 if (new Jsf.Verifier().decodeSignature(certRes).getSignatureType() != Jsf.SIGNATURE_TYPE.PKI) {
   throw new TypeError('Expected PKI');
 }
 
-CertRead.scanCerts();
+["p256#es256","p384#es384", "p521#es512","r2048#rs256"].forEach((element) => {
+  var jsObject = readJSON(element + '@jwk.json');
+  var decodedSignature = new Jsf.Verifier().decodeSignature(jsObject);
+  if (decodedSignature.getSignatureType() != Jsf.SIGNATURE_TYPE.PUBLIC_KEY) {
+    throw new TypeError('Expected PUBLIC_KEY');
+  }
+  console.log(element);
+  var privateKey = Keys.createPrivateKeyFromPem(readFile(element.substring(0, element.length -6) + 'privatekey.pem'));
+  decodedSignature.verifyPublicKey(privateKey.getPublicKey());
+  var signer = new Jsf.Signer(privateKey);
+  jsObject = signer.sign({'statement':'Hello signed world!'});
+  decodedSignature = new Jsf.Verifier().decodeSignature(jsObject);
+  if (decodedSignature.getSignatureType() != Jsf.SIGNATURE_TYPE.PUBLIC_KEY) {
+    throw new TypeError('Expected PKI');
+  }
+  decodedSignature.verifyPublicKey(privateKey.getPublicKey());
+  signer = new Jsf.Signer(privateKey);
+  signer.setSignatureLabel("attestation");
+  jsObject = signer.sign({'statement':'Hello signed world!'});
+  decodedSignature = new Jsf.Verifier("attestation").decodeSignature(jsObject);
+});
+
+// CertRead.scanCerts();
 
 function base64run() {
   for (var times = 0; times < 20; times++) {

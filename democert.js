@@ -15,7 +15,7 @@ const certificatePath = Keys.createCertificatesFromPem(keyData);
 var signer = new Jsf.Signer(privateKey);
 
 // Indicate that we want to include a certificate path
-signer.setCertificatePath(certificatePath, true);
+signer.setCertificatePath(certificatePath);
 
 // Create an object to sign
 var jsonObject = {'statement':'Hello signed world!'};

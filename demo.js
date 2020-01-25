@@ -38,7 +38,7 @@ const publicKey = readPublicKey('public-p256.pem');
 // Create a verifier object
 var verifier = new Jsf.Verifier();
 
-// Call decoding.  This will check that signature is technically correct
+// Call decoding.  This will check that the signature is technically correct
 var result = verifier.decodeSignature(signedJavaScript);
 
 // Now check if the anticipated key was used
