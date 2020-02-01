@@ -3,6 +3,8 @@
 JSF (JSON Signature Format) specification: https://cyberphone.github.io/doc/security/jsf.html<br>
 JEF (JSON Encryption Format) specification: https://cyberphone.github.io/doc/security/jef.html
 
+# CURRENTLY ONLY FOR INTERNAL USE!!!
+
 ### Installation
 
 There is no npm yet but you can test this code anyway by downloading the zip
